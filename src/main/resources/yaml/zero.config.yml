@@ -1,0 +1,210 @@
+subsystems:
+    drivetrain:
+        implemented: true
+        falcons:
+            FLDr: 11
+            FRDr: 9
+            RLDr: 18
+            RRDr: 1
+            FLAz: 10
+            FRAz: 8
+            RLAz: 19
+            RRAz: 2
+        canCoders:
+            FLEnc: 25
+            FREnc: 27
+            RLEnc: 28
+            RREnc: 26
+        invertMotor:
+            - FRDr
+            - RRDr
+            - RLDr
+        invertCanCoder:
+            - FREnc
+            - BREnc
+        swerveModules:
+            modules:
+                frontLeft:
+                    drive: FLDr
+                    azimuth: FLAz
+                    canCoder: FLEnc
+                    constants:
+                        encoderOffset: 117 #was 99 #1442 remote, 110 pid0
+                        invertSensorPhase: 1
+                frontRight:
+                    drive: FRDr
+                    azimuth: FRAz
+                    canCoder: FREnc
+                    constants:
+                        encoderOffset: 1626 #was 1589 # 683 remote, 1589 pid0
+                        invertSensorPhase: 1
+                backLeft:
+                    drive: RLDr
+                    azimuth: RLAz
+                    canCoder: RLEnc
+                    constants:
+                        encoderOffset: 2592 #was 556 #1149 remote, 556 pid0
+                        invertSensorPhase: 1
+                backRight:
+                    drive: RRDr
+                    azimuth: RRAz
+                    canCoder: RREnc
+                    constants:
+                        encoderOffset: 2856 #was 2854,  #1150 remote, 2854 id0
+                        invertSensorPhase: 1
+            drivePID:
+                slot0:
+                    kP: .04
+                    kI: 0.00001
+                    kD: 2.0
+                    kF: 0.0499
+            azimuthPID:
+                slot0:
+                    kP: 3.8 # formerly 3.8
+                    kI: 0.00075
+                    kD: 77 # formerly 77
+                    kF: 0
+                    allowableError: 5
+        constants:
+            ## Positional Configurations ##
+            maxVelTicks100ms: 12275.7 # ticks per 100ms
+            openLoopRampRate: 0.1
+            isSwerve: 1
+            encPPR: 14641
+            azimuthEncPPR: 4096
+            wheelDiameter: 4
+            kTrackScrubFactor: 1.0
+            ## Velocity Constraints ##
+            maxRotVel: 18
+            trackWidth: 19.75 # inches
+            wheelbaseLength: 19.75 # inches
+            maxVelOpenLoop: 3.75 # meters/s (3.6)
+            maxVelPathFollowing: 3.1 # meters/s (3.6)
+            maxAccel: 1.5 # meters/s^2 (2.54)
+            isDemoMode: 0
+            ## Auto Balance ##
+            autoBalanceDivider: 50
+            autoBalanceThreshold: 2.5 # degrees
+    elevator:
+        implemented: true
+        falcons:
+            angleMotorMain: 6
+            angleMotorFollower: 7
+            extensionMotor: 15
+        pidConfig:
+            slot0: # arm motion
+                kP: 0.02
+                kI: 0.00001
+                kD: 1.6
+                kF: 0
+                allowableError: 200
+            slot1: # arm locked
+                kP: 0.20
+                kI: 0.00002
+                kD: 1.4
+                kF: 0
+                allowableError: 50
+            slot2: # extension
+                kP: 0.45
+                kI: 0.001
+                kD: 3.2
+                kF: 0
+                allowableError: 200 # for PID control NOT checking if reached desired position
+        constants:
+            ## Config ##
+            isDemoMode: 0
+            extensionZeroOffset: 0 # in
+            extensionTicksPerInch: 5982.6
+            angleTicksPerDegree: 1456.35 # PPR: ~524288 ticks
+            maxVelTicks100ms: 10000 # used to simulate angle motors
+            allowableAngleError: 4 # degrees (+ || -)
+            allowableExtensionError: 1.5 # in (+ || -)
+            ## Motion Magic ##
+            motionMagicEnabled: 1 # 0 or 1, disable to utilize standard pid control
+            motionMagicCruiseVelocity: 20000 # ticks per 100ms
+            motionMagicAcceleration: 64000 # ticks per 100ms per second
+            ## Limits ##
+            forwardExtensionLimit: 45.125 # in - 330000 ticks
+            reverseExtensionLimit: 0 # in
+            forwardAngleLimit: 68.66  # degrees - 100000 ticks - Elevator horizontal orientation
+            reverseAngleLimit: -6.86 # degrees - (-10000) ticks - Elevator vertical orientation
+            ## Angles ##
+            stowAngle: 40 # degrees - 90000 ticks
+            collectAngle: 0 # degrees - -2500 ticks
+            scoreAngle: 40 # degrees - 60000 ticks
+            shelfAngle: 59.46 # degrees - 70000 ticks
+            ## Extensions ##
+            stowExtension: 1 # in
+            minExtension: 3.8 # in - 20000 ticks
+            midExtension: 13 # in - 130000 ticks
+            maxExtension: 33.5 # in - 320000 ticks
+            shelfConeExtension: 13 # in - 150000 ticks
+            shelfCubeExtension: 10 # in - 150000 ticks
+    collector:
+        implemented: true
+        sparkmaxes:
+            pivotMotor: 13
+            intakeMotor: 14
+        pidConfig:
+            slot0: # intakeMotor - only really works when locking motor max - min input is +/- 0.3 percent
+                kP: 0.001
+            slot1: # pivotMotor
+                kP: 0.025
+                allowableError: 3 # this is only being used to compare states
+        constants:
+            maxVelTicks100ms: 10.83
+            ## Demands ##
+            cubeIntakePower: 0.70 # percent output voltage
+            cubeOuttakePower: -0.45 # percent output voltage
+            coneIntakePower: -1 #was -0.50 - 1.375
+            coneOuttakePower: 0.65
+            ## Positions - 1/4 collector rotation = 29 ##
+            collectorRevolutionsPerDegree: .3305
+            zeroOffset: -90 # degrees
+            stowAngle: 90 # degrees
+            scoreConeAngle: -35 # degrees
+            scoreCubeAngle: 10 # degrees
+            shelfConeAngle: -38 # degrees
+            shelfCubeAngle: -48 # degrees
+            floorAngle: 26 # degrees
+            ## Limits ##
+            intakeStallAmps: 30
+    ledmanager:
+        implemented: true
+        candle: 23
+        constants:
+            raveEnabled: 0
+            raveSpeed: 0.05
+            cameraLed: 1
+            maxLevel: 200
+            ledStripCount: 35
+    camera:
+        implemented: false
+        constants:
+            useMultiTargetOdometry: 1
+infrastructure:
+    canivoreBusName: highSpeed
+    ## Power Distribution ##
+    pdId: 1
+    pdIsRev: true
+    ## Pneumatics Control ##
+    compressorEnabled: true
+    pcmIsRev: false
+    pcmId: 4
+    ## Pigeon ##
+    pigeonId: 32
+    isPigeon2: true
+controlboard: aleph1
+constants:
+    zeroingButton: 9 # channel of DIO port
+    ## Drivetrain ##
+    minAllowablePoseError: 0.1
+    maxAllowablePoseError: 5
+    ## Logging ##
+    logRobot: 1 # 0 or 1
+    logDrivetrain: 1 # 0 or 1
+    configStatusFrames: 0 # 0 or 1
+    ## General ##
+    teleopFieldCentric: 1 # 0 or 1
+    kLooperDt: .025 # seconds
+    resetFactoryDefaults: 0 # whether motors get reset to factory default

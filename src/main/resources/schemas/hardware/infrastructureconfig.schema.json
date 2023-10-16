@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "title": "Infrastructure Config",
+    "additionalProperties": false,
+    "properties": {
+        "pcmId": {
+            "type": "integer"
+        },
+        "pcmIsRev": {
+            "type": "boolean"
+        },
+        "compressorEnabled": {
+            "type": "boolean"
+        },
+        "canivoreBusName": {
+            "type": "string"
+        },
+        "pdIsRev": {
+            "type": "boolean"
+        },
+        "pdId": {
+            "type": "integer"
+        },
+        "pigeonId": {
+            "type": "integer"
+        },
+        "isPigeon2": {
+            "type": "boolean"
+        },
+        "proximitySensors": {
+            "$ref": "int.map.schema.json"
+        }
+    },
+    "anyOf": [
+        {
+            "required": [
+                "pcmId",
+                "canivoreBusName"
+            ]
+        }
+    ]
+}
+

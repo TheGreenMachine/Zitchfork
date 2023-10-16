@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "title": "Sensor Configuration",
+    "properties": {
+        "i2c": {
+            "existingJavaType": "java.util.Map<String,I2CPortConfiguration>"
+        },
+        "digitalInputs": {
+            "$ref": "int.map.schema.json"
+        },
+        "analogInputs": {
+            "$ref": "int.map.schema.json"
+        }
+    }
+}
