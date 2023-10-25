@@ -1,0 +1,44 @@
+subsystems:
+  drivetrain:
+    implemented: true
+    talons:
+      rightMain: 13
+      rightFollower: 12
+      leftMain: 23
+      leftFollower: 3
+    invertMotor:
+    pidConfig:
+      slot0:
+        kP: 0
+        kI: 0
+        kD: 0
+        kF: 0.0475813
+    constants:
+      ## Velocity Constraints ##
+      maxRotVel: 18
+      trackWidth: 19.75 # inches
+      wheelbaseLength: 19.75 # inches
+      maxVelOpenLoop: 3.75 # meters/s (3.6)
+      maxVelPathFollowing: 3.1 # meters/s (3.6)
+      maxAccel: 1.5 # meters/s^2 (2.54)
+      isDemoMode: 0
+  camera:
+    implemented: false
+    constants:
+      useMultiTargetOdometry: 1
+infrastructure:
+  ## Power Distribution ##
+  pdId: 0
+  ## Pigeon ##
+  pigeonId: 9
+  isPigeon2: false
+controlboard: aleph1
+constants:
+  ## Logging ##
+  logRobot: 1 # 0 or 1
+  logDrivetrain: 1 # 0 or 1
+  configStatusFrames: 0 # 0 or 1
+  ## General ##
+  teleopFieldCentric: 1 # 0 or 1
+  kLooperDt: .025 # seconds
+  resetFactoryDefaults: 0 # whether motors get reset to factory default
