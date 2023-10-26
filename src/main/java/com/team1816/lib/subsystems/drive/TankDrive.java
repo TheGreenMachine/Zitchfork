@@ -38,7 +38,7 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
      * Components
      */
     private final IGreenMotor leftMain, rightMain;
-    private final IGreenMotor leftFollowerA, rightFollowerA, leftFollowerB, rightFollowerB;
+    private final IGreenMotor leftFollowerA, rightFollowerA;
 
     /**
      * Odometry
@@ -77,10 +77,8 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
         // configure motors
         leftMain = factory.getMotor(NAME, "leftMain");
         leftFollowerA = factory.getFollowerMotor(NAME, "leftFollower", leftMain);
-        leftFollowerB = factory.getFollowerMotor(NAME, "leftFollowerTwo", leftMain);
         rightMain = factory.getMotor(NAME, "rightMain");
         rightFollowerA = factory.getFollowerMotor(NAME, "rightFollower", rightMain);
-        rightFollowerB = factory.getFollowerMotor(NAME, "rightFollowerTwo", rightMain);
 
         // configure follower motor currentLimits
         var currentLimitConfig = new SupplyCurrentLimitConfiguration(
@@ -97,19 +95,11 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
             currentLimitConfig,
             Constants.kLongCANTimeoutMs
         );
-        leftFollowerB.configSupplyCurrentLimit(
-            currentLimitConfig,
-            Constants.kLongCANTimeoutMs
-        );
         rightMain.configSupplyCurrentLimit(
             currentLimitConfig,
             Constants.kLongCANTimeoutMs
         );
         rightFollowerA.configSupplyCurrentLimit(
-            currentLimitConfig,
-            Constants.kLongCANTimeoutMs
-        );
-        rightFollowerB.configSupplyCurrentLimit(
             currentLimitConfig,
             Constants.kLongCANTimeoutMs
         );
@@ -435,11 +425,9 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
 
             rightMain.setNeutralMode(mode);
             rightFollowerA.setNeutralMode(mode);
-            rightFollowerB.setNeutralMode(mode);
 
             leftMain.setNeutralMode(mode);
             leftFollowerA.setNeutralMode(mode);
-            leftFollowerB.setNeutralMode(mode);
         }
     }
 
