@@ -59,7 +59,6 @@ public class Robot extends TimedRobot {
      */
     private final Drive drive;
 
-    private final LedManager ledManager;
     private final Camera camera;
 
 
@@ -106,7 +105,6 @@ public class Robot extends TimedRobot {
 
         // TODO: Set up any other subsystems here.
 
-        ledManager = Injector.get(LedManager.class);
         camera = Injector.get(Camera.class);
         robotState = Injector.get(RobotState.class);
         orchestrator = Injector.get(Orchestrator.class);
@@ -162,7 +160,7 @@ public class Robot extends TimedRobot {
             // readFromHardware and writeToHardware on a loop, but it can only call read/write it if it
             // can recognize the subsystem. To recognize your subsystem, just add it alongside the
             // drive, ledManager, and camera parameters.
-            subsystemManager.setSubsystems(drive, ledManager, camera);
+            subsystemManager.setSubsystems(drive, camera);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -226,8 +224,6 @@ public class Robot extends TimedRobot {
             enabledLoop.stop();
             // Stop any running autos
             autoModeManager.stopAuto();
-            ledManager.setDefaultStatus(LedManager.RobotStatus.DISABLED);
-            ledManager.writeToHardware();
 
             if (autoModeManager.getSelectedAuto() == null) {
                 autoModeManager.reset();
@@ -251,8 +247,6 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         disabledLoop.stop();
-        ledManager.setDefaultStatus(LedManager.RobotStatus.AUTONOMOUS);
-        ledManager.indicateStatus(LedManager.RobotStatus.AUTONOMOUS);
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
@@ -272,8 +266,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         try {
             disabledLoop.stop();
-            ledManager.setDefaultStatus(LedManager.RobotStatus.ENABLED);
-            ledManager.indicateStatus(LedManager.RobotStatus.ENABLED);
 
             infrastructure.startCompressor();
 
@@ -293,24 +285,14 @@ public class Robot extends TimedRobot {
         try {
             double initTime = System.currentTimeMillis();
 
-            ledManager.indicateStatus(LedManager.RobotStatus.ENABLED, LedManager.ControlState.BLINK);
-            // Warning - blocks thread - intended behavior?
-            while (System.currentTimeMillis() - initTime <= 3000) {
-                ledManager.writeToHardware();
-            }
-
             enabledLoop.stop();
             disabledLoop.start();
             drive.zeroSensors();
 
-            ledManager.indicateStatus(LedManager.RobotStatus.DISABLED, LedManager.ControlState.BLINK);
-
             if (subsystemManager.testSubsystems()) {
                 GreenLogger.log("ALL SYSTEMS PASSED");
-                ledManager.indicateStatus(LedManager.RobotStatus.ENABLED);
             } else {
                 System.err.println("CHECK ABOVE OUTPUT SOME SYSTEMS FAILED!!!");
-                ledManager.indicateStatus(LedManager.RobotStatus.ERROR);
             }
         } catch (Throwable t) {
             faulted = true;
@@ -349,18 +331,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         try {
-            if (RobotController.getUserButton()) {
-                drive.zeroSensors(Constants.kDefaultZeroingPose);
-                ledManager.indicateStatus(LedManager.RobotStatus.ZEROING);
-            } else {
-                // non-camera LEDs will flash red if robot periodic updates fail
-                if (faulted) {
-                    if (ledManager.getCurrentControlStatus() != LedManager.RobotStatus.ERROR) {
-                        ledManager.indicateStatus(LedManager.RobotStatus.ERROR, LedManager.ControlState.BLINK);
-                    }
-                    ledManager.writeToHardware();
-                }
-            }
 
             if (RobotBase.isReal()) {
                 // TODO: Logic for if the robot is not a simulation
