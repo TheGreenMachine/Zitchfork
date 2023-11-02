@@ -17,8 +17,8 @@ subsystems:
         kF: 0.0475813 # From Zodiac Pro
     constants:
       ## Velocity Constraints ##
-      maxVelTicks100ms: 40275.7 # From Zodiac Pro
-      encPPR: 22220.8 # From Zodiac Pro
+      # maxVelTicks100ms: 40275.7 # From Zodiac Pro
+      # encPPR: 22220.8 # From Zodiac Pro
       isSwerve: 0
       maxRotVel: 18
       trackWidth: 19.75 # inches
@@ -38,6 +38,7 @@ subsystems:
     constants:
       useMultiTargetOdometry: 1
 infrastructure:
+  canivoreBusName: rio
   ## Power Distribution ##
   pdId: 0 #This is not a placeholder/null substitute, the id is actually 0
   pdIsRev: false
@@ -59,4 +60,4 @@ constants:
   ## General ##
   teleopFieldCentric: 1 # 0 or 1
   kLooperDt: .025 # seconds
-  resetFactoryDefaults: 0 # whether motors get reset to factory default
+  resetFactoryDefaults: 1 # whether motors get reset to factory default

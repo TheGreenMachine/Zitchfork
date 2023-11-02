@@ -153,16 +153,6 @@
         "window": {
           "visible": true
         }
-      },
-      "/SmartDashboard/Mech 2D": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Robot color": {
-        "window": {
-          "visible": true
-        }
       }
     }
   },
