@@ -39,7 +39,7 @@ subsystems:
       useMultiTargetOdometry: 1
 infrastructure:
   ## Power Distribution ##
-  pdId: 0
+  pdId: 0 #This is not a placeholder/null substitute, the id is actually 0
   pdIsRev: false
   ## Pigeon ##
   pigeonId: 9
