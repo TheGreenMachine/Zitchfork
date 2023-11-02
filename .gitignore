@@ -5,7 +5,6 @@ build
 .gradle
 networktables.json
 shuffleboard_config.json
-simgui.json
 simgui-ds.json
 simgui-window.json
 bin/
