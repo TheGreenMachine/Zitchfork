@@ -99,6 +99,7 @@ public class Constants {
     public static final double kCameraMountingAngleY = 0; // degrees
     public static final double kTurretZedRadius = Units.inchesToMeters(7); // meters
 
+    public static final double kLoggingDiskPartitionRatio = 0.25; // percent of storage space allotted for logging
     public static boolean kLoggingRobot = factory.getConstant("logRobot") > 0;
     public static boolean kLoggingDrivetrain = factory.getConstant("logDrivetrain") > 0 && kLoggingRobot;
 
