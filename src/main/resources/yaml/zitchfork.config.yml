@@ -14,16 +14,25 @@ subsystems:
         kP: 0
         kI: 0
         kD: 0
-        kF: 0.0475813
+        kF: 0.0475813 # From Zodiac Pro
     constants:
       ## Velocity Constraints ##
+      maxVelTicks100ms: 40275.7 # From Zodiac Pro
+      encPPR: 22220.8 # From Zodiac Pro
+      isSwerve: 0
       maxRotVel: 18
       trackWidth: 19.75 # inches
       wheelbaseLength: 19.75 # inches
+      wheelDiameter: 4
+      kTrackScrubFactor: 1.0
       maxVelOpenLoop: 3.75 # meters/s (3.6)
       maxVelPathFollowing: 3.1 # meters/s (3.6)
       maxAccel: 1.5 # meters/s^2 (2.54)
+      currentLimit: 40
       isDemoMode: 0
+      ## Auto Balance ##
+      autoBalanceDivider: 50
+      autoBalanceThreshold: 2.5 # degrees
   camera:
     implemented: false
     constants:
@@ -31,11 +40,18 @@ subsystems:
 infrastructure:
   ## Power Distribution ##
   pdId: 0
+  pdIsRev: false
   ## Pigeon ##
   pigeonId: 9
   isPigeon2: false
+  ## Compressor ##
+  compressorEnabled: false
+  pcmId: -1
 controlboard: aleph1
 constants:
+  # Drivetrain (Taken from Zero)
+  minAllowablePoseError: 0.1
+  maxAllowablePoseError: 5
   ## Logging ##
   logRobot: 1 # 0 or 1
   logDrivetrain: 1 # 0 or 1
