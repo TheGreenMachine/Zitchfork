@@ -14,7 +14,7 @@ subsystems:
         kP: 0
         kI: 0
         kD: 0
-        kF: 0.0475813 # From Zodiac Pro
+        kF: 0.871875
     constants:
       ## Velocity Constraints ##
       # maxVelTicks100ms: 40275.7 # From Zodiac Pro
@@ -60,4 +60,4 @@ constants:
   ## General ##
   teleopFieldCentric: 1 # 0 or 1
   kLooperDt: .025 # seconds
-  resetFactoryDefaults: 1 # whether motors get reset to factory default
+  resetFactoryDefaults: 0 # whether motors get reset to factory default
