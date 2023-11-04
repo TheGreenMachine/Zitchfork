@@ -202,7 +202,10 @@ public class Robot extends TimedRobot {
                             break;
                         }
                     }
+
+
                     System.out.println("Current Disk Usage: " + (100) * ((double) root.getUsableSpace() / root.getTotalSpace()) + "%");
+
                 }
                 // start logging
                 DataLogManager.start(logFileDir, "", Constants.kLooperDt);
