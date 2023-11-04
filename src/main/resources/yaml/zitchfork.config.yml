@@ -10,9 +10,9 @@ subsystems:
       - rightMain
     pidConfig:
       slot0:
-        kP: 0
-        kI: 0
-        kD: 0
+        kP: 1.6
+        kI: 0.001
+        kD: 15
         kF: 0.871875
     constants:
       ## Velocity Constraints ##

@@ -7,6 +7,7 @@ import com.team1816.lib.auto.PathFinder;
 import com.team1816.lib.auto.modes.AutoMode;
 import com.team1816.lib.auto.modes.DoNothingMode;
 import com.team1816.lib.auto.modes.DriveStraightMode;
+import com.team1816.lib.auto.modes.TuneDrivetrainMode;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.auto.modes.*;
 import com.team1816.season.configuration.Constants;
@@ -194,8 +195,8 @@ public class AutoModeManager {
         switch (mode) {
             case DO_NOTHING:
                 return new DoNothingMode();
-//            case TUNE_DRIVETRAIN: // commented for competition purposes
-//                return new TuneDrivetrainMode();
+            case TUNE_DRIVETRAIN: // commented for competition purposes
+                return new TuneDrivetrainMode();
 //            case LIVING_ROOM:
 //                return (new LivingRoomMode(color));
             default:

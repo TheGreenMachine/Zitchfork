@@ -24,6 +24,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -189,12 +190,14 @@ public class Robot extends TimedRobot {
                         for (String f : Objects.requireNonNull(logDir.list())) {
                             File cur = new File(f);
                             // retains official match logs (practice, qualification, elimination)
-                            if (!(f.contains("P") || f.contains("Q") || f.contains("E")) && ols > cur.lastModified()) { // smaller value indicates older file
+                            if (!(f.contains("P") || f.contains("Q") || f.contains("E")) && ols > cur.lastModified() // smaller value indicates older file
+                                && f.contains("FRC_20")) {
+                                System.out.println(f);
                                 ols = cur.lastModified();
                                 oldestLog = cur;
                             }
                         }
-                        if (oldestLog != null && oldestLog.delete()) {
+                        if (oldestLog != null && new File(oldestLog.getCanonicalPath()).delete()) {
                             System.out.println("Deleting File: " + oldestLog);
                         } else {
                             System.out.println("Unable to Delete Log Files - Manual Deletion Required");
@@ -237,7 +240,11 @@ public class Robot extends TimedRobot {
                 );
         } catch (Throwable t) {
             faulted = true;
-            throw t;
+            try {
+                throw t;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class TuneDrivetrainMode extends AutoMode {
 
     public TuneDrivetrainMode() {
-        super(List.of(new TrajectoryAction(new DriveStraightPath())));
+        super(List.of(new TrajectoryAction(new DriveStraightPath(5))));
     }
 
 
