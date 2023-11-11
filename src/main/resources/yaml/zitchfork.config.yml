@@ -32,6 +32,16 @@ subsystems:
       ## Auto Balance ##
       autoBalanceDivider: 50
       autoBalanceThreshold: 2.5 # degrees
+  collector:
+    implemented: true
+    sparkmaxes:
+      intakeMotor: 14
+    pidConfig:
+      slot0: # intakeMotor - only really works when locking motor max - min input is +/- 0.3 percent
+        kP: 0.001
+    constants:
+      intakePower: 0.5
+      outtakePower: -0.5
   camera:
     implemented: false
     constants:
