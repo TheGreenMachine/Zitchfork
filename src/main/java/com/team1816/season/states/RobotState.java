@@ -6,6 +6,7 @@ import com.team1816.lib.auto.PathFinder;
 import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.configuration.Constants;
 import com.team1816.season.configuration.FieldConfig;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -52,6 +53,8 @@ public class RobotState {
      * Orchestrator states
      */
 
+    public Elevator.HEIGHT_STATE actualElevatorHeightState = Elevator.HEIGHT_STATE.HUMAN_COLLECT;
+    public double actualElevatorHeightMeters = 0;
     // TODO: Insert any states that you may need to keep track of.
 
     public VisionPoint superlativeTarget = new VisionPoint();

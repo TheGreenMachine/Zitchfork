@@ -36,6 +36,18 @@ subsystems:
     implemented: false
     constants:
       useMultiTargetOdometry: 1
+  elevator:
+    implemented: true
+    talons:
+      #TODO id the motor
+      heightMotor: 0
+    constants:
+      #TODO find these values
+      elevatorZitchforkOffset: 0
+      elevatorTicksPerMeter: 0
+      allowableHeightError: 0
+      human_collectHeight: 0.7493
+      silo_dropHeight: 0.9144
 infrastructure:
   canivoreBusName: rio
   ## Power Distribution ##
