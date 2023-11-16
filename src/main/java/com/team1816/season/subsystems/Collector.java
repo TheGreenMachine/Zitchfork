@@ -10,6 +10,7 @@ import com.team1816.season.states.RobotState;
 @Singleton
 public class Collector extends Subsystem {
 
+    //documentation please!! :))
     /**
      * Base parameters needed to instantiate a subsystem
      *

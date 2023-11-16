@@ -35,13 +35,13 @@ subsystems:
   collector:
     implemented: true
     sparkmaxes:
-      intakeMotor: 14
+      intakeMotor: 14 #change once get robot
     pidConfig:
       slot0: # intakeMotor - only really works when locking motor max - min input is +/- 0.3 percent
         kP: 0.001
     constants:
-      intakePower: 0.5
-      outtakePower: -0.5
+      intakePower: 0.5 #to change
+      outtakePower: -0.5 #to change
   camera:
     implemented: false
     constants:
