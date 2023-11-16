@@ -27,6 +27,9 @@ public class Elevator extends Subsystem {
     /**
      * Properties
      */
+
+    //do we need zitchfork in the name of the motor if we know it is the name of the robot? (Zero double meaning?)
+            //and can we please stick to consistent naming conventions?
     public static final double elevatorZitchforkOffset = factory.getConstant(NAME, "elevatorZitchforkOffset");
     public static final double elevatorTicksPerMeter = factory.getConstant(NAME, "elevatorTicksPerMeter");
     public static final double human_collectHeight = (factory.getConstant(NAME, "human_collectHeight") + elevatorZitchforkOffset) * elevatorTicksPerMeter;
@@ -40,6 +43,8 @@ public class Elevator extends Subsystem {
     private double desiredHeightTicks = 0;
     private double actualHeightTicks = 0;
     private double actualHeightVelocity = 0;
+
+    //based on the enum change, what should this default value be?
     private HEIGHT_STATE desiredElevatorHeightState = HEIGHT_STATE.HUMAN_COLLECT;
 
     private boolean outputsChanged;
@@ -136,6 +141,8 @@ public class Elevator extends Subsystem {
         return false;
     }
 
+
+    //maybe a STOW enum value? what should happen when the robot boots up?
     public enum HEIGHT_STATE{
         HUMAN_COLLECT,
 
