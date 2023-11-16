@@ -18,6 +18,8 @@ public class Collector extends Subsystem {
      * @param inf  Infrastructure
      * @param rs   RobotState
      */
+
+    //put variables above the constructor explanation (move above the green stuff)
     private static final String NAME = "collector";
     private final IGreenMotor intakeMotor;
     private COLLECTOR_STATE desiredState = COLLECTOR_STATE.STOP;
