@@ -49,7 +49,6 @@ public class Elevator extends Subsystem {
     /**
      * Logging
      */
-
     private DoubleLogEntry desiredHeightLogger;
     private DoubleLogEntry actualHeightLogger;
     private DoubleLogEntry actualHeightVelocityLogger;
@@ -74,7 +73,12 @@ public class Elevator extends Subsystem {
         }
     }
 
-    public void setDesiredElevatorExtensionState(HEIGHT_STATE desiredElevatorExtensionState){
+    /**
+     * Sets the desired elevator height in meters
+     *
+     * @param desiredElevatorExtensionState
+     */
+    public void setDesiredElevatorHeightState(HEIGHT_STATE desiredElevatorExtensionState){
         this.desiredElevatorHeightState = desiredElevatorExtensionState;
         outputsChanged = true;
     }
@@ -117,9 +121,21 @@ public class Elevator extends Subsystem {
         }
     }
 
+    /**
+     * Checks if the elevator's actual height is within range of its target height
+     *
+     * @return boolean - true if elevator is within range of target
+     */
     private boolean isHeightAtTarget(){
         return Math.abs(desiredHeightTicks - actualHeightTicks) < (allowableHeightError * elevatorTicksPerMeter) && !outputsChanged;
     }
+
+    /**
+     * Checks if the elevator's actual height is within the meter range of its target height
+     *
+     * @param meterRange
+     * @return boolean - true if elevator is within the meter range of target
+     */
     private boolean isHeightAtTarget(double meterRange){
         return Math.abs(desiredHeightTicks - actualHeightTicks) < (meterRange * elevatorTicksPerMeter) && !outputsChanged;
     }
