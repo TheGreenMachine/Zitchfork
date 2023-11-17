@@ -10,7 +10,28 @@ import com.team1816.season.states.RobotState;
 @Singleton
 public class Collector extends Subsystem {
 
-    //documentation please!! :))
+    /**
+     * Name
+     */
+    private static final String NAME = "collector";
+
+    /**
+     * Components
+     */
+    private final IGreenMotor intakeMotor;
+
+    /**
+     * Properties
+     */
+    public final double intakePower;
+    public final double outtakePower;
+
+    /**
+     * States
+     */
+    private COLLECTOR_STATE desiredState = COLLECTOR_STATE.STOP;
+    private boolean outputsChanged = false;
+
     /**
      * Base parameters needed to instantiate a subsystem
      *
@@ -18,32 +39,28 @@ public class Collector extends Subsystem {
      * @param inf  Infrastructure
      * @param rs   RobotState
      */
-
-    //put variables above the constructor explanation (move above the green stuff)
-    private static final String NAME = "collector";
-    private final IGreenMotor intakeMotor;
-    private COLLECTOR_STATE desiredState = COLLECTOR_STATE.STOP;
-    private boolean outputsChanged = false;
-    public final double intakePower;
-    public final double outtakePower;
     public Collector(String name, Infrastructure inf, RobotState rs) {
         super(name, inf, rs);
         intakeMotor = factory.getMotor(NAME, "intakeMotor");
         intakePower = factory.getConstant(NAME, "intakePower", 0.70);
         outtakePower = factory.getConstant(NAME, "outtakePower", 0.45);
     }
+
+    /**
+     * Sets the desired state of the collector
+     *
+     * @param desiredState COLLECTOR_STATE
+     */
     public void setDesiredState(COLLECTOR_STATE desiredState) {
         this.desiredState = desiredState;
         outputsChanged = true;
     }
-    public void outtakeGamePiece(boolean outtaking) {
-        if (outtaking) {
-            setDesiredState(COLLECTOR_STATE.OUTTAKE);
-        } else {
-            setDesiredState(COLLECTOR_STATE.STOP);
-        }
-    }
 
+    /**
+     * Reads actual outputs from intake motor
+     *
+     * @see Subsystem#readFromHardware()
+     */
     @Override
     public void readFromHardware() {
         if (robotState.actualCollectorState != desiredState) {
@@ -51,6 +68,11 @@ public class Collector extends Subsystem {
         }
     }
 
+    /**
+     * Writes outputs to intake motor
+     *
+     * @see Subsystem#writeToHardware()
+     */
     @Override
     public void writeToHardware() {
         if (outputsChanged) {
@@ -79,10 +101,19 @@ public class Collector extends Subsystem {
 
     }
 
+    /**
+     * Tests the collector subsystem, returns true if tests passed
+     *
+     * @return true if tests passed
+     */
     @Override
     public boolean testSubsystem() {
         return false;
     }
+
+    /**
+     * Base enum for collector
+     */
     public enum COLLECTOR_STATE {
         STOP,
         INTAKE,
