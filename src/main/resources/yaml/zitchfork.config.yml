@@ -43,11 +43,12 @@ subsystems:
       heightMotor: 0
     constants:
       #TODO find these values
-      elevatorZitchforkOffset: 0
+      elevatorZeroOffset: 0
       elevatorTicksPerMeter: 0
       allowableHeightError: 0
-      human_collectHeight: 0.7493
-      silo_dropHeight: 0.9144
+      humanCollectHeight: 0.7493 #height of collector
+      siloDropHeight: 0.9144 #height of silo
+      stowHeight: 0
 infrastructure:
   canivoreBusName: rio
   ## Power Distribution ##

@@ -53,7 +53,7 @@ public class RobotState {
      * Orchestrator states
      */
 
-    public Elevator.HEIGHT_STATE actualElevatorHeightState = Elevator.HEIGHT_STATE.HUMAN_COLLECT;
+    public Elevator.HEIGHT_STATE actualElevatorHeightState = Elevator.HEIGHT_STATE.STOW;
     public double actualElevatorHeightMeters = 0;
     // TODO: Insert any states that you may need to keep track of.
 

@@ -27,13 +27,11 @@ public class Elevator extends Subsystem {
     /**
      * Properties
      */
-
-    //do we need zitchfork in the name of the motor if we know it is the name of the robot? (Zero double meaning?)
-            //and can we please stick to consistent naming conventions?
-    public static final double elevatorZitchforkOffset = factory.getConstant(NAME, "elevatorZitchforkOffset");
+    public static final double elevatorZeroOffset = factory.getConstant(NAME, "elevatorZeroOffset");
     public static final double elevatorTicksPerMeter = factory.getConstant(NAME, "elevatorTicksPerMeter");
-    public static final double human_collectHeight = (factory.getConstant(NAME, "human_collectHeight") + elevatorZitchforkOffset) * elevatorTicksPerMeter;
-    public static final double silo_dropHeight = (factory.getConstant(NAME, "silo_dropHeight") + elevatorZitchforkOffset) * elevatorTicksPerMeter;
+    public static final double humanCollectHeight = (factory.getConstant(NAME, "humanCollectHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
+    public static final double siloDropHeight = (factory.getConstant(NAME, "siloDropHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
+    public static final double stowHeight = (factory.getConstant(NAME, "stowHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
 
     public static final double allowableHeightError = factory.getConstant(NAME, "allowableHeighterror");
 
@@ -44,8 +42,7 @@ public class Elevator extends Subsystem {
     private double actualHeightTicks = 0;
     private double actualHeightVelocity = 0;
 
-    //based on the enum change, what should this default value be?
-    private HEIGHT_STATE desiredElevatorHeightState = HEIGHT_STATE.HUMAN_COLLECT;
+    private HEIGHT_STATE desiredElevatorHeightState = HEIGHT_STATE.STOW;
 
     private boolean outputsChanged;
 
@@ -110,8 +107,9 @@ public class Elevator extends Subsystem {
             double height = 0;
 
             switch (desiredElevatorHeightState) {
-                case HUMAN_COLLECT -> height = human_collectHeight;
-                case SILO_DROP -> height = silo_dropHeight;
+                case HUMAN_COLLECT -> height = humanCollectHeight;
+                case SILO_DROP -> height = siloDropHeight;
+                case STOW -> height = stowHeight;
             }
             desiredHeightTicks = height;
 
@@ -128,7 +126,7 @@ public class Elevator extends Subsystem {
 
     @Override
     public void zeroSensors() {
-        //maybe zero the height motor, don't know what position to zero it at yet
+            //maybe zero the height motor, don't know what position to zero it at yet
     }
 
     @Override
@@ -142,10 +140,11 @@ public class Elevator extends Subsystem {
     }
 
 
-    //maybe a STOW enum value? what should happen when the robot boots up?
     public enum HEIGHT_STATE{
         HUMAN_COLLECT,
 
-        SILO_DROP
+        SILO_DROP,
+
+        STOW
     }
 }
