@@ -26,6 +26,10 @@ public class Collector extends Subsystem {
     public final double intakePower;
     public final double outtakePower;
 
+    // Log intakeMotor's velocity
+    // Log intakeMotor's current draw
+    // Both can be modeled after Zero's collector logging
+
     /**
      * States
      */
@@ -66,6 +70,9 @@ public class Collector extends Subsystem {
         if (robotState.actualCollectorState != desiredState) {
             robotState.actualCollectorState = desiredState;
         }
+
+        //Update logged values here
+        //Appending to logmanagers also happens here
     }
 
     /**
@@ -82,7 +89,7 @@ public class Collector extends Subsystem {
                     intakeMotor.set(ControlMode.Velocity, 0);
                 }
                 case INTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, intakePower);
+                    intakeMotor.set(ControlMode.Velocity, intakePower); // Think about this. Is this the right value to give in velocity mode? Is velocity mode appropriate for this subsystem?
                 }
                 case OUTTAKE -> {
                     intakeMotor.set(ControlMode.Velocity, outtakePower);
@@ -111,6 +118,7 @@ public class Collector extends Subsystem {
         return false;
     }
 
+    // You may want getter methods for desiredState and the motor velocity for use in controls
     /**
      * Base enum for collector
      */

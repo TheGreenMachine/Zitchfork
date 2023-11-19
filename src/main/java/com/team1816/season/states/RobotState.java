@@ -118,6 +118,8 @@ public class RobotState {
 
         // TODO: Insert any state set up here.
 
+        // Reset actualCollectorState
+
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
         visibleTargets = new ArrayList<>();
