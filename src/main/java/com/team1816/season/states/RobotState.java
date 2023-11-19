@@ -54,7 +54,7 @@ public class RobotState {
      */
 
     public Elevator.HEIGHT_STATE actualElevatorHeightState = Elevator.HEIGHT_STATE.STOW;
-    public double actualElevatorHeightMeters = 0;
+    public double actualElevatorHeightMeters = 0; // Switch to inches
     // TODO: Insert any states that you may need to keep track of.
 
     public VisionPoint superlativeTarget = new VisionPoint();

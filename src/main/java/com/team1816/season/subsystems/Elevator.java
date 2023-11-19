@@ -22,7 +22,7 @@ public class Elevator extends Subsystem {
     /**
      * Components
      */
-    private final IGreenMotor heightMotor;
+    private final IGreenMotor heightMotor; // Better name needed, like spoolMotor or something similar- descriptive of what it actually does
 
     /**
      * Properties
@@ -33,14 +33,14 @@ public class Elevator extends Subsystem {
     public static final double siloDropHeight = (factory.getConstant(NAME, "siloDropHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
     public static final double stowHeight = (factory.getConstant(NAME, "stowHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
 
-    public static final double allowableHeightError = factory.getConstant(NAME, "allowableHeighterror");
+    public static final double allowableHeightError = factory.getConstant(NAME, "allowableHeighterror"); // Capitalize the E in error, it is case sensitive
 
     /**
      * States
      */
     private double desiredHeightTicks = 0;
     private double actualHeightTicks = 0;
-    private double actualHeightVelocity = 0;
+    private double actualHeightVelocity = 0; // specify units in comment
 
     private HEIGHT_STATE desiredElevatorHeightState = HEIGHT_STATE.STOW;
 
@@ -51,7 +51,7 @@ public class Elevator extends Subsystem {
      */
     private DoubleLogEntry desiredHeightLogger;
     private DoubleLogEntry actualHeightLogger;
-    private DoubleLogEntry actualHeightVelocityLogger;
+    private DoubleLogEntry actualHeightVelocityLogger; // More descriptive name needed
     private DoubleLogEntry heightCurrentDraw;
 
     /**
@@ -66,6 +66,7 @@ public class Elevator extends Subsystem {
         this.heightMotor = factory.getMotor(NAME, "heightMotor");
 
         if (Constants.kLoggingRobot) {
+            //Don't need /Height, as there's only one motor on this elevator
             desiredHeightLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/desiredHeightPosition");
             actualHeightLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/actualHeightPosition");
             actualHeightVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/actualHeightVelocity");
@@ -142,7 +143,8 @@ public class Elevator extends Subsystem {
 
     @Override
     public void zeroSensors() {
-            //maybe zero the height motor, don't know what position to zero it at yet
+            // This method sets the height motor's 0 position to its current position no matter where it is.
+            // use setSelectedSensorPosition()
     }
 
     @Override
@@ -156,7 +158,7 @@ public class Elevator extends Subsystem {
     }
 
 
-    public enum HEIGHT_STATE{
+    public enum HEIGHT_STATE{ // Remove the spaces in between values it's weird
         HUMAN_COLLECT,
 
         SILO_DROP,
