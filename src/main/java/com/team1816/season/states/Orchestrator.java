@@ -7,6 +7,7 @@ import com.team1816.lib.subsystems.drive.Drive;
 import com.team1816.lib.subsystems.vision.Camera;
 import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.lib.util.visionUtil.VisionPoint;
+import com.team1816.season.auto.commands.AutoScoreCommand;
 import com.team1816.season.configuration.Constants;
 import com.team1816.season.configuration.FieldConfig;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -40,13 +41,10 @@ public class Orchestrator {
      * Properties
      */
 
-    // Place threads here.
-    // e.g. private Thread [ThreadName]Thread;
+    private Thread autoScoreThread;
 
+    public static boolean runningAutoScore = false;
     public static boolean runningAutoTarget = false;
-
-    // Place appropriate running booleans here.
-    // e.g. public static boolean running[ThreadName] = false;
 
     /**
      * Instantiates an Orchestrator with all its subsystems
@@ -72,23 +70,27 @@ public class Orchestrator {
      * Actions
      */
 
-    // Place any actions here.
-
+    public void autoScore(int heldCobs) {
+        if (!runningAutoScore) {
+            runningAutoScore = true;
+            GreenLogger.log("Auto Score action started!");
+            AutoScoreCommand command = new AutoScoreCommand(heldCobs);
+            autoScoreThread = new Thread(command::run);
+            autoScoreThread.start();
+        } else {
+            autoScoreThread.stop();
+            GreenLogger.log("Stopped! Auto Score sequence cancelled!");
+            runningAutoScore = !runningAutoScore;
+        }
+    }
 
     /**
      * Clears executable threads
      */
     public void clearThreads() {
-        /**
-            For clearing a thread, here is the general pattern we follow:
-
-            if (thread != null && thread.isAlive()) {
-                thread.stop();
-            }
-
-            Make sure to use the pattern above to avoid causing exceptions
-            and any errors, when stopping the work on a thread.
-         */
+        if (autoScoreThread != null && autoScoreThread.isAlive()) {
+            autoScoreThread.stop();
+        }
     }
 
     /** Superseded Odometry Handling */

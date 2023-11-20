@@ -19,6 +19,7 @@ import com.team1816.season.configuration.DrivetrainTargets;
 import com.team1816.season.states.Orchestrator;
 import com.team1816.season.states.RobotState;
 import com.team1816.season.subsystems.Collector;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -68,6 +69,8 @@ public class Robot extends TimedRobot {
 
     private final Collector collector;
 
+    private final Elevator elevator;
+
     /**
      * Factory
      */
@@ -109,6 +112,7 @@ public class Robot extends TimedRobot {
         disabledLoop = new Looper(this);
         drive = (Injector.get(Drive.Factory.class)).getInstance();
         collector = Injector.get(Collector.class);
+        elevator = Injector.get(Elevator.class);
         camera = Injector.get(Camera.class);
         robotState = Injector.get(RobotState.class);
         orchestrator = Injector.get(Orchestrator.class);
@@ -164,7 +168,7 @@ public class Robot extends TimedRobot {
             // readFromHardware and writeToHardware on a loop, but it can only call read/write it if it
             // can recognize the subsystem. To recognize your subsystem, just add it alongside the
             // drive, ledManager, and camera parameters.
-            subsystemManager.setSubsystems(drive, camera, collector);
+            subsystemManager.setSubsystems(drive, camera, collector, elevator);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -233,17 +237,41 @@ public class Robot extends TimedRobot {
                             }
                         }
                     ),
+                    createAction(
+                        () -> controlBoard.getAsBool("collectPos"),
+                        () -> {
+                            elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.HUMAN_COLLECT);
+                        }
+                    ),
                     // Operator Gamepad
                     createHoldAction(
                         () -> controlBoard.getAsBool("outtake"),
                         (pressed) -> {
                             if (pressed) {
-                              collector.setDesiredState(Collector.COLLECTOR_STATE.OUTTAKE);
+                                collector.setDesiredState(Collector.COLLECTOR_STATE.OUTTAKE);
                             } else {
                                 collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
                             }
                         }
-                     )
+                     ),
+                    createAction(
+                        () -> controlBoard.getAsBool("siloPos"),
+                        () -> {
+                            elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.SILO_DROP);
+                        }
+                    ),
+                    createAction(
+                        () -> controlBoard.getAsBool("autoScore1"),
+                        () -> {
+                            orchestrator.autoScore(1);
+                        }
+                    ),
+                    createAction(
+                        () -> controlBoard.getAsBool("autoScore2"),
+                        () -> {
+                            orchestrator.autoScore(2);
+                        }
+                    )
                     // Button Board Gamepad
                 );
         } catch (Throwable t) {

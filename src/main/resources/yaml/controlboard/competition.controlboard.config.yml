@@ -8,6 +8,7 @@ driver:
       horizontal: rotation
   buttonpad:
     b: brakeMode
+    y: collectPos
   axes:
     rightTrigger: slowMode
     leftTrigger: intakeCob
@@ -15,6 +16,10 @@ driver:
     start: zeroPose
 operator:
   rumble: false
+  buttonpad:
+    y: siloPos
+    b: autoScore1
+    a: autoScore2
   axes:
     rightTrigger: outtake
 demoMode: false

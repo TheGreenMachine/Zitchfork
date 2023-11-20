@@ -53,7 +53,6 @@ subsystems:
       heightMotor: -1 # Use -1 as the placeholder value because 0 is a valid id
     constants:
       #TODO find these values
-
       #Switch units to inches because that's what mechanical uses and we need parity for mechanisms
       elevatorZeroOffset: 0
       elevatorTicksPerMeter: 0
