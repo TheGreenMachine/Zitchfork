@@ -1,0 +1,17 @@
+driver:
+  rumble: false
+  joysticks:
+    left:
+      horizontal: strafe
+      vertical: throttle
+    right:
+      horizontal: rotation
+  buttonpad:
+    b: brakeMode
+  axes:
+    rightTrigger: slowMode
+  buttons:
+    start: zeroPose
+operator:
+  rumble: false
+demoMode: false

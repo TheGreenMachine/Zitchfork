@@ -209,8 +209,20 @@ public class Robot extends TimedRobot {
             actionManager =
                 new ActionManager(
                     // Driver Gamepad
-                        // TODO: new Action
-                        // TODO: new HoldAction
+                    createAction(
+                            () -> controlBoard.getAsBool("zeroPose"),
+                            () -> {
+                                drive.zeroSensors(robotState.allianceColor == Color.BLUE ? Constants.kDefaultZeroingPose : Constants.kFlippedZeroingPose);
+                            }
+                    ),
+                    createHoldAction(
+                            () -> controlBoard.getAsBool("brakeMode"),
+                            drive::setBraking
+                    ),
+                    createHoldAction(
+                            () -> controlBoard.getAsBool("slowMode"),
+                            drive::setSlowMode
+                    )
                     // Operator Gamepad
                     // Button Board Gamepad
                 );
