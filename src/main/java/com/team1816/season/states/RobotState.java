@@ -7,6 +7,7 @@ import com.team1816.lib.util.visionUtil.VisionPoint;
 import com.team1816.season.configuration.Constants;
 import com.team1816.season.configuration.FieldConfig;
 import com.team1816.season.subsystems.Collector;
+import com.team1816.season.subsystems.Elevator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -54,6 +55,9 @@ public class RobotState {
      */
 
     public Collector.COLLECTOR_STATE actualCollectorState = Collector.COLLECTOR_STATE.STOP;
+    public Elevator.HEIGHT_STATE actualElevatorHeightState = Elevator.HEIGHT_STATE.STOW;
+    public double actualElevatorHeightMeters = 0; // Switch to inches
+    // TODO: Insert any states that you may need to keep track of.
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
@@ -117,8 +121,6 @@ public class RobotState {
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
 
         // TODO: Insert any state set up here.
-
-        // Reset actualCollectorState
 
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
