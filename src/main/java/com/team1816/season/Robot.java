@@ -18,6 +18,7 @@ import com.team1816.season.configuration.Constants;
 import com.team1816.season.configuration.DrivetrainTargets;
 import com.team1816.season.states.Orchestrator;
 import com.team1816.season.states.RobotState;
+import com.team1816.season.subsystems.Collector;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -65,6 +66,7 @@ public class Robot extends TimedRobot {
 
     private final Camera camera;
 
+    private final Collector collector;
 
     /**
      * Factory
@@ -106,9 +108,7 @@ public class Robot extends TimedRobot {
         enabledLoop = new Looper(this);
         disabledLoop = new Looper(this);
         drive = (Injector.get(Drive.Factory.class)).getInstance();
-
-        // TODO: Set up any other subsystems here.
-
+        collector = Injector.get(Collector.class);
         camera = Injector.get(Camera.class);
         robotState = Injector.get(RobotState.class);
         orchestrator = Injector.get(Orchestrator.class);
@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
             // readFromHardware and writeToHardware on a loop, but it can only call read/write it if it
             // can recognize the subsystem. To recognize your subsystem, just add it alongside the
             // drive, ledManager, and camera parameters.
-            subsystemManager.setSubsystems(drive, camera);
+            subsystemManager.setSubsystems(drive, camera, collector);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -210,20 +210,40 @@ public class Robot extends TimedRobot {
                 new ActionManager(
                     // Driver Gamepad
                     createAction(
-                            () -> controlBoard.getAsBool("zeroPose"),
-                            () -> {
-                                drive.zeroSensors(robotState.allianceColor == Color.BLUE ? Constants.kDefaultZeroingPose : Constants.kFlippedZeroingPose);
+                        () -> controlBoard.getAsBool("zeroPose"),
+                        () -> {
+                            drive.zeroSensors(robotState.allianceColor == Color.BLUE ? Constants.kDefaultZeroingPose : Constants.kFlippedZeroingPose);
+                        }
+                    ),
+                    createHoldAction(
+                        () -> controlBoard.getAsBool("brakeMode"),
+                        drive::setBraking
+                    ),
+                    createHoldAction(
+                        () -> controlBoard.getAsBool("slowMode"),
+                        drive::setSlowMode
+                    ),
+                    createHoldAction(
+                        () -> controlBoard.getAsBool("intakeCob"),
+                        (pressed) -> {
+                            if (pressed) {
+                                collector.setDesiredState(Collector.COLLECTOR_STATE.INTAKE);
+                            } else {
+                                collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
                             }
+                        }
                     ),
-                    createHoldAction(
-                            () -> controlBoard.getAsBool("brakeMode"),
-                            drive::setBraking
-                    ),
-                    createHoldAction(
-                            () -> controlBoard.getAsBool("slowMode"),
-                            drive::setSlowMode
-                    )
                     // Operator Gamepad
+                    createHoldAction(
+                        () -> controlBoard.getAsBool("outtake"),
+                        (pressed) -> {
+                            if (pressed) {
+                              collector.setDesiredState(Collector.COLLECTOR_STATE.OUTTAKE);
+                            } else {
+                                collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
+                            }
+                        }
+                     )
                     // Button Board Gamepad
                 );
         } catch (Throwable t) {
@@ -284,8 +304,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         try {
             disabledLoop.stop();
-
-            infrastructure.startCompressor();
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -416,30 +434,6 @@ public class Robot extends TimedRobot {
             -controlBoard.getAsDouble("strafe"),
             controlBoard.getAsDouble("rotation")
         );
-
-        // 2023 legacy autobalance code
-//        if (drive.isAutoBalancing()) {
-//            ChassisSpeeds fieldRelativeChassisSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(
-//                0,
-//                -controlBoard.getAsDouble("strafe"),
-//                0,
-//                robotState.driverRelativeFieldToVehicle.getRotation());
-//            drive.autoBalance(fieldRelativeChassisSpeed);
-//        }
-        //2023 legacy snapping code
-//            double rotation;
-//            if (snappingToDriver || snappingToHumanPlayer) {
-//                double rotVal = MathUtil.inputModulus(
-//                    robotState.driverRelativeFieldToVehicle.getRotation().getDegrees(), robotState.allianceColor == Color.BLUE ? -180 : 180, robotState.allianceColor == Color.BLUE ? 180 : -180
-//                );
-//                if (snappingToDriver) {
-//                    if (rotVal == 0)
-//                        rotVal += 0.01d;
-//                    rotation = Math.min(0.5, (180 - Math.abs(rotVal)) / 40) * -Math.signum(rotVal);
-//                } else {
-//                    rotation = Math.min(0.5, Math.abs(rotVal) / 40) * Math.signum(rotVal);
-//                }
-//            }
 
         }
 

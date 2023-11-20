@@ -10,8 +10,11 @@ driver:
     b: brakeMode
   axes:
     rightTrigger: slowMode
+    leftTrigger: intakeCob
   buttons:
     start: zeroPose
 operator:
   rumble: false
+  axes:
+    rightTrigger: outtake
 demoMode: false
