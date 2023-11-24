@@ -1,5 +1,5 @@
 driver:
-  rumble: false
+  rumble: true
   joysticks:
     left:
       horizontal: strafe
@@ -15,7 +15,7 @@ driver:
   buttons:
     start: zeroPose
 operator:
-  rumble: false
+  rumble: true
   buttonpad:
     y: siloPos
     b: autoScore1

@@ -40,6 +40,34 @@ public class ControlBoard implements IControlBoard {
         return getDoubleFromControllerYaml(getName);
     }
 
+    @Override
+    public void setFullRumble(CONTROLLER controller, double percent) {
+        if (controller == CONTROLLER.DRIVER) {
+            driverController.setRumble(percent);
+        } else {
+            operatorController.setRumble(percent);
+        }
+    }
+
+    @Override
+    public void setLeftRumble(CONTROLLER controller, double percent) {
+        if (controller == CONTROLLER.DRIVER) {
+            driverController.setLeftRumble(percent);
+        } else {
+            operatorController.setLeftRumble(percent);
+        }
+
+    }
+
+    @Override
+    public void setRightRumble(CONTROLLER controller, double percent) {
+        if (controller == CONTROLLER.DRIVER) {
+            driverController.setRightRumble(percent);
+        } else {
+            operatorController.setRightRumble(percent);
+        }
+    }
+
     public double getDoubleFromControllerYaml(String name) {
         return getDoubleFromControllerYaml(name, 0);
     }
@@ -121,4 +149,5 @@ public class ControlBoard implements IControlBoard {
         }
         return defaultVal;
     }
+
 }

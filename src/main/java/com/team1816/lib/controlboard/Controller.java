@@ -83,30 +83,30 @@ public abstract class Controller {
     }
 
     /**
-     * Toggles rumble on a generic controller, can be fine-tuned further
+     * Sets rumble on a generic controller
      *
-     * @param on
+     * @param rumblePercent
      */
-    public void setRumble(boolean on) {
-        mController.setRumble(GenericHID.RumbleType.kBothRumble, on ? 1 : 0);
+    public void setRumble(double rumblePercent) {
+        mController.setRumble(GenericHID.RumbleType.kBothRumble, rumblePercent);
     }
 
     /**
-     * Toggles rumble on a generic controller, can be fine-tuned further
+     * Sets left-side rumble on a generic controller
      *
-     * @param on
+     * @param rumblePercent
      */
-    public void setLeftRumble(boolean on) {
-        mController.setRumble(GenericHID.RumbleType.kLeftRumble, on ? 1 : 0);
+    public void setLeftRumble(double rumblePercent) {
+        mController.setRumble(GenericHID.RumbleType.kLeftRumble, rumblePercent);
     }
 
     /**
-     * Toggles rumble on a generic controller, can be fine-tuned further
+     * Sets right-side rumble on a generic controller
      *
-     * @param on
+     * @param rumblePercent
      */
-    public void setRightRumble(boolean on) {
-        mController.setRumble(GenericHID.RumbleType.kRightRumble, on ? 1 : 0);
+    public void setRightRumble(double rumblePercent) {
+        mController.setRumble(GenericHID.RumbleType.kRightRumble, rumblePercent);
     }
 
     /**

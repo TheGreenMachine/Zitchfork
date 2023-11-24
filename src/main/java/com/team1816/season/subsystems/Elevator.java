@@ -2,6 +2,8 @@ package com.team1816.season.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.team1816.lib.Infrastructure;
+import com.team1816.lib.Injector;
+import com.team1816.lib.controlboard.IControlBoard;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.season.configuration.Constants;
@@ -23,6 +25,7 @@ public class Elevator extends Subsystem {
      * Components
      */
     private final IGreenMotor heightMotor; // Better name needed, like spoolMotor or something similar- descriptive of what it actually does
+    private IControlBoard controlBoard;
 
     /**
      * Properties
@@ -64,6 +67,7 @@ public class Elevator extends Subsystem {
         super(NAME, inf, rs);
 
         this.heightMotor = factory.getMotor(NAME, "heightMotor");
+        controlBoard = Injector.get(IControlBoard.class);
 
         if (Constants.kLoggingRobot) {
             //Don't need /Height, as there's only one motor on this elevator
@@ -88,6 +92,11 @@ public class Elevator extends Subsystem {
     public void readFromHardware() {
         actualHeightTicks = heightMotor.getSelectedSensorPosition(0);
         actualHeightVelocity = heightMotor.getSelectedSensorVelocity(0);
+
+        if (robotState.actualElevatorHeightState != desiredElevatorHeightState) { // Mismatch + height not met => rumble
+            //TODO once tick numbers actually recorded, rumble proportionally?
+            controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0.5);
+        }
 
         if (robotState.actualElevatorHeightState != desiredElevatorHeightState && isHeightAtTarget()) {
             outputsChanged = true;
@@ -119,6 +128,8 @@ public class Elevator extends Subsystem {
             desiredHeightTicks = height;
 
             heightMotor.set(ControlMode.Position, desiredHeightTicks);
+
+
         }
     }
 

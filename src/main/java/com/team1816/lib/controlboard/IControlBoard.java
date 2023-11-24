@@ -9,4 +9,16 @@ public interface IControlBoard {
     boolean getAsBool(String getName);
 
     double getAsDouble(String getName);
+
+    //TODO don't bring these to the next season, this is a terrible implementation
+    void setFullRumble(CONTROLLER controller, double percent);
+
+    void setLeftRumble(CONTROLLER controller, double percent);
+
+    void setRightRumble(CONTROLLER controller, double percent);
+
+    enum CONTROLLER {
+        DRIVER,
+        OPERATOR
+    }
 }
