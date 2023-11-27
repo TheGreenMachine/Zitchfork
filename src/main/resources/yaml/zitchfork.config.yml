@@ -72,7 +72,7 @@ infrastructure:
   ## Compressor ##
   compressorEnabled: false
   pcmId: -1
-controlboard: aleph1
+controlboard: competition
 constants:
   # Drivetrain (Taken from Zero)
   minAllowablePoseError: 0.1

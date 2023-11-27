@@ -49,6 +49,8 @@ public class Elevator extends Subsystem {
 
     private boolean outputsChanged;
 
+    private boolean rumbleJustStopped = false;
+
     /**
      * Logging
      */
@@ -96,10 +98,14 @@ public class Elevator extends Subsystem {
         if (robotState.actualElevatorHeightState != desiredElevatorHeightState) { // Mismatch + height not met => rumble
             //TODO once tick numbers actually recorded, rumble proportionally?
             controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0.5);
+        } else if (rumbleJustStopped) {
+            rumbleJustStopped = false;
+            controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR,0);
         }
 
         if (robotState.actualElevatorHeightState != desiredElevatorHeightState && isHeightAtTarget()) {
             outputsChanged = true;
+            rumbleJustStopped = true;
             robotState.actualElevatorHeightState = desiredElevatorHeightState;
         }
 
