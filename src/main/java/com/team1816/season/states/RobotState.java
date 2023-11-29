@@ -115,11 +115,7 @@ public class RobotState {
         deltaVehicle = new ChassisSpeeds();
         calculatedVehicleAccel = new ChassisSpeeds();
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
-
-        // TODO: Insert any state set up here.
-
-        // Reset actualCollectorState
-
+        actualCollectorState = Collector.COLLECTOR_STATE.STOP;
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
         visibleTargets = new ArrayList<>();

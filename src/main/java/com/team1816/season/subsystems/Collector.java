@@ -5,7 +5,10 @@ import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.subsystems.Subsystem;
+import com.team1816.season.configuration.Constants;
 import com.team1816.season.states.RobotState;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 @Singleton
 public class Collector extends Subsystem {
@@ -26,14 +29,17 @@ public class Collector extends Subsystem {
     public final double intakePower;
     public final double outtakePower;
 
-    // Log intakeMotor's velocity
-    // Log intakeMotor's current draw
-    // Both can be modeled after Zero's collector logging
+    /**
+     * Logging
+     */
+    private DoubleLogEntry intakeVelocityLogger;
+    private DoubleLogEntry intakeCurrentDraw;
 
     /**
      * States
      */
     private COLLECTOR_STATE desiredState = COLLECTOR_STATE.STOP;
+    private double collectorVelocity = 0;
     private boolean outputsChanged = false;
 
     /**
@@ -46,8 +52,12 @@ public class Collector extends Subsystem {
     public Collector(String name, Infrastructure inf, RobotState rs) {
         super(name, inf, rs);
         intakeMotor = factory.getMotor(NAME, "intakeMotor");
-        intakePower = factory.getConstant(NAME, "intakePower", 0.70);
-        outtakePower = factory.getConstant(NAME, "outtakePower", 0.45);
+        intakePower = factory.getConstant(NAME, "intakePower", -0.5);
+        outtakePower = factory.getConstant(NAME, "outtakePower", 0.5);
+        if (Constants.kLoggingRobot) {
+            intakeVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/intakeVelocity");
+            intakeCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Collector/currentDraw");
+        }
     }
 
     /**
@@ -67,12 +77,16 @@ public class Collector extends Subsystem {
      */
     @Override
     public void readFromHardware() {
+        collectorVelocity = intakeMotor.getSelectedSensorVelocity(0);
+
         if (robotState.actualCollectorState != desiredState) {
             robotState.actualCollectorState = desiredState;
         }
 
-        //Update logged values here
-        //Appending to logmanagers also happens here
+        if (Constants.kLoggingRobot) {
+            intakeVelocityLogger.append(collectorVelocity);
+            intakeCurrentDraw.append(intakeMotor.getOutputCurrent());
+        }
     }
 
     /**
@@ -86,13 +100,13 @@ public class Collector extends Subsystem {
             outputsChanged = false;
             switch (desiredState) {
                 case STOP -> {
-                    intakeMotor.set(ControlMode.Velocity, 0);
+                    intakeMotor.set(ControlMode.PercentOutput, 0);
                 }
                 case INTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, intakePower); // Think about this. Is this the right value to give in velocity mode? Is velocity mode appropriate for this subsystem?
+                    intakeMotor.set(ControlMode.PercentOutput, intakePower);
                 }
                 case OUTTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, outtakePower);
+                    intakeMotor.set(ControlMode.PercentOutput, outtakePower);
                 }
             }
         }
@@ -118,7 +132,24 @@ public class Collector extends Subsystem {
         return false;
     }
 
-    // You may want getter methods for desiredState and the motor velocity for use in controls
+    /**
+     * Returns the desired collector state
+     *
+     * @return desired collector state
+     */
+    public COLLECTOR_STATE getDesiredCollectorState() {
+        return desiredState;
+    }
+
+    /**
+     * Returns the collector velocity
+     *
+     * @return collector velocity
+     */
+    public double getCollectorVelocity() {
+        return collectorVelocity;
+    }
+
     /**
      * Base enum for collector
      */
