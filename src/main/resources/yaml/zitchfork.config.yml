@@ -54,6 +54,7 @@ subsystems:
     constants:
       #TODO find these values
       ascendPower: 0
+      joltPower: 0
       descendPower: 0
       taughtPower: 0
 infrastructure:

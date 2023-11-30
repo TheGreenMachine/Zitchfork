@@ -20,6 +20,7 @@ operator:
     y: siloPos
     b: autoScore1
     a: autoScore2
+    x: emergencyJolt
   axes:
     rightTrigger: outtake
 demoMode: false

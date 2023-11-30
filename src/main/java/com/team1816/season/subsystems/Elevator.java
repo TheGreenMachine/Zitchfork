@@ -33,8 +33,11 @@ public class Elevator extends Subsystem {
      * Properties
      */
     private final double ascendPower;
+    private final double joltPower;
     private final double descendPower;
     private final double taughtPower;
+
+    private boolean downReleased;
 
     /**
      * States
@@ -51,7 +54,6 @@ public class Elevator extends Subsystem {
      */
     private DoubleLogEntry spoolCurrentDraw;
 
-
     /**
      * Base parameters needed to instantiate a subsystem
      *
@@ -66,6 +68,7 @@ public class Elevator extends Subsystem {
         this.spoolMotor = factory.getMotor(NAME, "spoolMotor");
 
         ascendPower = factory.getConstant(NAME, "ascendPower");
+        joltPower = factory.getConstant(NAME, "joltPower");
         descendPower = factory.getConstant(NAME, "descendPower");
         taughtPower = factory.getConstant(NAME, "taughtPower");
 
@@ -86,9 +89,7 @@ public class Elevator extends Subsystem {
 
     @Override
     public void readFromHardware() {
-
         if (robotState.actualElevatorHeightState != desiredElevatorHeightState) { // Mismatch + height not met => rumble
-            //TODO once tick numbers actually recorded, rumble proportionally?
             controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0.5);
         } else if (rumbleJustStopped) {
             rumbleJustStopped = false;
@@ -113,7 +114,8 @@ public class Elevator extends Subsystem {
             double desiredPower;
 
             switch (desiredElevatorHeightState) {
-                case HUMAN_COLLECT -> desiredPower = descendPower;
+                case HUMAN_COLLECT, EMERGENCY_DOWN -> desiredPower = descendPower;
+                case JOLT -> desiredPower = joltPower;
                 case SILO_DROP -> desiredPower = ascendPower;
                 default -> desiredPower = taughtPower; //Stop
             }
@@ -130,7 +132,7 @@ public class Elevator extends Subsystem {
      */
     private boolean isHeightAtTarget(){
         switch (desiredElevatorHeightState) {
-            case SILO_DROP -> {
+            case SILO_DROP, JOLT -> {
                 if (((LazyTalonSRX) spoolMotor).isRevLimitSwitchClosed() == 1 && !outputsChanged) {
                     return true;
                 }
@@ -139,6 +141,9 @@ public class Elevator extends Subsystem {
                 if (((LazyTalonSRX) spoolMotor).isFwdLimitSwitchClosed() == 1 && !outputsChanged) {
                     return true;
                 }
+            }
+            case EMERGENCY_DOWN -> {
+                return downReleased;
             }
             default -> {
                 return true;
@@ -160,10 +165,16 @@ public class Elevator extends Subsystem {
         return false;
     }
 
+    public void setDownReleased(boolean released) {
+        downReleased = released;
+    }
+
 
     public enum HEIGHT_STATE{
         HUMAN_COLLECT,
         SILO_DROP,
-        STOP
+        STOP,
+        JOLT,
+        EMERGENCY_DOWN
     }
 }

@@ -275,6 +275,17 @@ public class Robot extends TimedRobot {
                         () -> {
                             orchestrator.autoScore(2);
                         }
+                    ),
+                    createHoldAction(
+                        () -> controlBoard.getAsBool("emergencyJolt"),
+                        (pressed) -> {
+                            if (pressed) {
+                                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.HUMAN_COLLECT);
+                            } else {
+                                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.JOLT);
+                            }
+                            elevator.setDownReleased(pressed);
+                        }
                     )
                     // Button Board Gamepad
                 );
