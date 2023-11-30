@@ -3,11 +3,14 @@ package com.team1816.season.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
+import com.team1816.lib.hardware.components.motor.LazyTalonSRX;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.season.configuration.Constants;
 import com.team1816.season.states.RobotState;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DigitalInput;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 
@@ -22,37 +25,28 @@ public class Elevator extends Subsystem {
     /**
      * Components
      */
-    private final IGreenMotor heightMotor; // Better name needed, like spoolMotor or something similar- descriptive of what it actually does
+    private final IGreenMotor spoolMotor;
 
     /**
      * Properties
      */
-    public static final double elevatorZeroOffset = factory.getConstant(NAME, "elevatorZeroOffset");
-    public static final double elevatorTicksPerMeter = factory.getConstant(NAME, "elevatorTicksPerMeter");
-    public static final double humanCollectHeight = (factory.getConstant(NAME, "humanCollectHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
-    public static final double siloDropHeight = (factory.getConstant(NAME, "siloDropHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
-    public static final double stowHeight = (factory.getConstant(NAME, "stowHeight") + elevatorZeroOffset) * elevatorTicksPerMeter;
-
-    public static final double allowableHeightError = factory.getConstant(NAME, "allowableHeighterror"); // Capitalize the E in error, it is case sensitive
+    private final double ascendPower;
+    private final double descendPower;
+    private final double taughtPower;
 
     /**
      * States
      */
-    private double desiredHeightTicks = 0;
-    private double actualHeightTicks = 0;
-    private double actualHeightVelocity = 0; // specify units in comment
 
-    private HEIGHT_STATE desiredElevatorHeightState = HEIGHT_STATE.STOW;
+    private HEIGHT_STATE desiredElevatorHeightState = HEIGHT_STATE.STOP;
 
     private boolean outputsChanged;
 
     /**
      * Logging
      */
-    private DoubleLogEntry desiredHeightLogger;
-    private DoubleLogEntry actualHeightLogger;
-    private DoubleLogEntry actualHeightVelocityLogger; // More descriptive name needed
-    private DoubleLogEntry heightCurrentDraw;
+    private DoubleLogEntry spoolCurrentDraw;
+
 
     /**
      * Base parameters needed to instantiate a subsystem
@@ -60,17 +54,18 @@ public class Elevator extends Subsystem {
      * @param inf            Infrastructure
      * @param rs             RobotState
      */
+    @Inject
     public Elevator(Infrastructure inf, RobotState rs) {
         super(NAME, inf, rs);
 
-        this.heightMotor = factory.getMotor(NAME, "heightMotor");
+        this.spoolMotor = factory.getMotor(NAME, "spoolMotor");
+
+        ascendPower = factory.getConstant(NAME, "ascendPower");
+        descendPower = factory.getConstant(NAME, "descendPower");
+        taughtPower = factory.getConstant(NAME, "taughtPower");
 
         if (Constants.kLoggingRobot) {
-            //Don't need /Height, as there's only one motor on this elevator
-            desiredHeightLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/desiredHeightPosition");
-            actualHeightLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/actualHeightPosition");
-            actualHeightVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/actualHeightVelocity");
-            heightCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/Height/currentDraw");
+            spoolCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/currentDraw");
         }
     }
 
@@ -86,21 +81,14 @@ public class Elevator extends Subsystem {
 
     @Override
     public void readFromHardware() {
-        actualHeightTicks = heightMotor.getSelectedSensorPosition(0);
-        actualHeightVelocity = heightMotor.getSelectedSensorVelocity(0);
 
         if (robotState.actualElevatorHeightState != desiredElevatorHeightState && isHeightAtTarget()) {
             outputsChanged = true;
             robotState.actualElevatorHeightState = desiredElevatorHeightState;
         }
 
-        robotState.actualElevatorHeightMeters = actualHeightTicks / elevatorTicksPerMeter;
-
         if (Constants.kLoggingRobot) {
-            desiredHeightLogger.append(desiredHeightTicks);
-            actualHeightLogger.append(actualHeightTicks);
-            actualHeightVelocityLogger.append(actualHeightVelocity);
-            heightCurrentDraw.append(heightMotor.getOutputCurrent());
+            spoolCurrentDraw.append(spoolMotor.getOutputCurrent());
         }
     }
 
@@ -108,17 +96,16 @@ public class Elevator extends Subsystem {
     public void writeToHardware() {
         if (outputsChanged) {
             outputsChanged = false;
-
-            double height = 0;
+            double desiredPower;
 
             switch (desiredElevatorHeightState) {
-                case HUMAN_COLLECT -> height = humanCollectHeight;
-                case SILO_DROP -> height = siloDropHeight;
-                case STOW -> height = stowHeight;
+                case HUMAN_COLLECT -> desiredPower = descendPower;
+                case SILO_DROP -> desiredPower = ascendPower;
+                default -> desiredPower = taughtPower; //Stop
             }
-            desiredHeightTicks = height;
 
-            heightMotor.set(ControlMode.Position, desiredHeightTicks);
+            spoolMotor.set(ControlMode.PercentOutput, desiredPower);
+
         }
     }
 
@@ -128,28 +115,31 @@ public class Elevator extends Subsystem {
      * @return boolean - true if elevator is within range of target
      */
     private boolean isHeightAtTarget(){
-        return Math.abs(desiredHeightTicks - actualHeightTicks) < (allowableHeightError * elevatorTicksPerMeter) && !outputsChanged;
-    }
+        switch (desiredElevatorHeightState) {
+            case SILO_DROP -> {
+                if (((LazyTalonSRX) spoolMotor).isRevLimitSwitchClosed() == 1 && !outputsChanged) {
+                    return true;
+                }
+            }
+            case HUMAN_COLLECT -> {
+                if (((LazyTalonSRX) spoolMotor).isFwdLimitSwitchClosed() == 1 && !outputsChanged) {
+                    return true;
+                }
+            }
+            default -> {
+                return true;
+            }
+        }
 
-    /**
-     * Checks if the elevator's actual height is within the meter range of its target height
-     *
-     * @param meterRange
-     * @return boolean - true if elevator is within the meter range of target
-     */
-    private boolean isHeightAtTarget(double meterRange){
-        return Math.abs(desiredHeightTicks - actualHeightTicks) < (meterRange * elevatorTicksPerMeter) && !outputsChanged;
+        return false;
     }
 
     @Override
     public void zeroSensors() {
-            // This method sets the height motor's 0 position to its current position no matter where it is.
-            // use setSelectedSensorPosition()
     }
 
     @Override
     public void stop() {
-
     }
 
     @Override
@@ -158,11 +148,9 @@ public class Elevator extends Subsystem {
     }
 
 
-    public enum HEIGHT_STATE{ // Remove the spaces in between values it's weird
+    public enum HEIGHT_STATE{
         HUMAN_COLLECT,
-
         SILO_DROP,
-
-        STOW
+        STOP
     }
 }
