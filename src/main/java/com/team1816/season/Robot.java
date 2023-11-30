@@ -287,7 +287,8 @@ public class Robot extends TimedRobot {
         disabledLoop.stop();
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
-        collector.zeroSensors();
+
+        robotState.actualCollectorState = Collector.COLLECTOR_STATE.STOP;
 
         // TODO: Set up subsystem states
 
