@@ -56,7 +56,6 @@ public class RobotState {
 
     public Collector.COLLECTOR_STATE actualCollectorState = Collector.COLLECTOR_STATE.STOP;
     public Elevator.HEIGHT_STATE actualElevatorHeightState = Elevator.HEIGHT_STATE.STOP;
-    // TODO: Insert any states that you may need to keep track of.
 
     public VisionPoint superlativeTarget = new VisionPoint();
     public List<VisionPoint> visibleTargets = new ArrayList<>();
@@ -118,9 +117,8 @@ public class RobotState {
         deltaVehicle = new ChassisSpeeds();
         calculatedVehicleAccel = new ChassisSpeeds();
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
-
-        // TODO: Insert any state set up here.
-
+        actualCollectorState = Collector.COLLECTOR_STATE.STOP;
+        actualElevatorHeightState = Elevator.HEIGHT_STATE.HUMAN_COLLECT;
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
         visibleTargets = new ArrayList<>();

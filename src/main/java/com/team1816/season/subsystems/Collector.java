@@ -1,11 +1,15 @@
 package com.team1816.season.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.subsystems.Subsystem;
+import com.team1816.season.configuration.Constants;
 import com.team1816.season.states.RobotState;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 @Singleton
 public class Collector extends Subsystem {
@@ -23,17 +27,20 @@ public class Collector extends Subsystem {
     /**
      * Properties
      */
-    public final double intakePower;
-    public final double outtakePower;
+    public final double intakeSpeed;
+    public final double outtakeSpeed;
 
-    // Log intakeMotor's velocity
-    // Log intakeMotor's current draw
-    // Both can be modeled after Zero's collector logging
+    /**
+     * Logging
+     */
+    private DoubleLogEntry intakeVelocityLogger;
+    private DoubleLogEntry intakeCurrentDraw;
 
     /**
      * States
      */
     private COLLECTOR_STATE desiredState = COLLECTOR_STATE.STOP;
+    private double collectorVelocity = 0;
     private boolean outputsChanged = false;
 
     /**
@@ -43,11 +50,16 @@ public class Collector extends Subsystem {
      * @param inf  Infrastructure
      * @param rs   RobotState
      */
+    @Inject
     public Collector(String name, Infrastructure inf, RobotState rs) {
         super(name, inf, rs);
         intakeMotor = factory.getMotor(NAME, "intakeMotor");
-        intakePower = factory.getConstant(NAME, "intakePower", 0.70);
-        outtakePower = factory.getConstant(NAME, "outtakePower", 0.45);
+        intakeSpeed = factory.getConstant(NAME, "intakeSpeed", -0.5);
+        outtakeSpeed = factory.getConstant(NAME, "outtakeSpeed", 0.5);
+        if (Constants.kLoggingRobot) {
+            intakeVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/intakeVelocity");
+            intakeCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Collector/currentDraw");
+        }
     }
 
     /**
@@ -67,12 +79,16 @@ public class Collector extends Subsystem {
      */
     @Override
     public void readFromHardware() {
+        collectorVelocity = intakeMotor.getSelectedSensorVelocity(0);
+
         if (robotState.actualCollectorState != desiredState) {
             robotState.actualCollectorState = desiredState;
         }
 
-        //Update logged values here
-        //Appending to logmanagers also happens here
+        if (Constants.kLoggingRobot) {
+            intakeVelocityLogger.append(collectorVelocity);
+            intakeCurrentDraw.append(intakeMotor.getOutputCurrent());
+        }
     }
 
     /**
@@ -89,10 +105,10 @@ public class Collector extends Subsystem {
                     intakeMotor.set(ControlMode.Velocity, 0);
                 }
                 case INTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, intakePower); // Think about this. Is this the right value to give in velocity mode? Is velocity mode appropriate for this subsystem?
+                    intakeMotor.set(ControlMode.Velocity, intakeSpeed);
                 }
                 case OUTTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, outtakePower);
+                    intakeMotor.set(ControlMode.Velocity, outtakeSpeed);
                 }
             }
         }
@@ -118,7 +134,24 @@ public class Collector extends Subsystem {
         return false;
     }
 
-    // You may want getter methods for desiredState and the motor velocity for use in controls
+    /**
+     * Returns the desired collector state
+     *
+     * @return desired collector state
+     */
+    public COLLECTOR_STATE getDesiredCollectorState() {
+        return desiredState;
+    }
+
+    /**
+     * Returns the collector velocity
+     *
+     * @return collector velocity
+     */
+    public double getCollectorVelocity() {
+        return collectorVelocity;
+    }
+
     /**
      * Base enum for collector
      */

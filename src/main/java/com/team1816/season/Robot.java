@@ -331,6 +331,8 @@ public class Robot extends TimedRobot {
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
+        robotState.actualCollectorState = Collector.COLLECTOR_STATE.STOP;
+        robotState.actualElevatorHeightState = Elevator.HEIGHT_STATE.STOP
         // TODO: Set up subsystem states
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
@@ -347,6 +349,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         try {
             disabledLoop.stop();
+
+            infrastructure.startCompressor();
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
