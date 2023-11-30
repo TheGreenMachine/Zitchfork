@@ -35,13 +35,13 @@ subsystems:
   collector:
     implemented: true
     sparkmaxes:
-      intakeMotor: -1 #change once get robot
+      intakeMotor: 14 #change once get robot
     pidConfig:
       slot0:
-        kP: 0 # Will only need to tune kP for this
+        kP: 0 # Must tune if use velocity
     constants:
-      intakeSpeed: 0.5 #to change
-      outtakeSpeed: -0.5 #to change
+      intakeSpeed: 0.4
+      outtakeSpeed: -0.4
   camera:
     implemented: false
     constants:
