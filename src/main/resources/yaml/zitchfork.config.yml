@@ -53,14 +53,9 @@ subsystems:
       heightMotor: -1 # Use -1 as the placeholder value because 0 is a valid id
     constants:
       #TODO find these values
-      #Switch units to inches because that's what mechanical uses and we need parity for mechanisms
-      elevatorZeroOffset: 0
-      elevatorTicksPerMeter: 0
-      allowableHeightError: 0
-      #If the unit isn't in the name, specify it in a comment
-      humanCollectHeight: 0.7493 #height of human player station
-      siloDropHeight: 0.9144 #height of silo
-      stowHeight: 0
+      ascendPower: 0
+      descendPower: 0
+      taughtPower: 0
 infrastructure:
   canivoreBusName: rio
   ## Power Distribution ##
