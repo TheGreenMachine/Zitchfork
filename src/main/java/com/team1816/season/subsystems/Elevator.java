@@ -117,12 +117,12 @@ public class Elevator extends Subsystem {
     private boolean isHeightAtTarget(){
         switch (desiredElevatorHeightState) {
             case SILO_DROP -> {
-                if (((LazyTalonSRX) spoolMotor).isRevLimitSwitchClosed() == 1 && !outputsChanged) {
+                if (((LazyTalonSRX) spoolMotor).isFwdLimitSwitchClosed() == 1 && !outputsChanged) {
                     return true;
                 }
             }
             case HUMAN_COLLECT -> {
-                if (((LazyTalonSRX) spoolMotor).isFwdLimitSwitchClosed() == 1 && !outputsChanged) {
+                if (((LazyTalonSRX) spoolMotor).isRevLimitSwitchClosed() == 1 && !outputsChanged) {
                     return true;
                 }
             }
