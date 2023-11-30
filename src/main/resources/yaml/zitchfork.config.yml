@@ -40,8 +40,8 @@ subsystems:
       slot0:
         kP: 0 # Must tune if use velocity
     constants:
-      intakeSpeed: 0.4
-      outtakeSpeed: -0.4
+      intakeSpeed: -0.4
+      outtakeSpeed: 0.4
   camera:
     implemented: false
     constants:
