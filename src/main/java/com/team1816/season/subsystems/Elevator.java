@@ -90,7 +90,7 @@ public class Elevator extends Subsystem {
     @Override
     public void readFromHardware() {
         if (robotState.actualElevatorHeightState != desiredElevatorHeightState) { // Mismatch + height not met => rumble
-            controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0.5);
+            controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, desiredElevatorHeightState == HEIGHT_STATE.JOLT ? 0.9 : 0.5);
         } else if (rumbleJustStopped) {
             rumbleJustStopped = false;
             controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR,0);
