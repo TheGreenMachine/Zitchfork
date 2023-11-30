@@ -56,7 +56,7 @@ subsystems:
       ascendPower: 0
       joltPower: 0
       descendPower: 0
-      taughtPower: 0
+      tautPower: 0
 infrastructure:
   canivoreBusName: rio
   ## Power Distribution ##

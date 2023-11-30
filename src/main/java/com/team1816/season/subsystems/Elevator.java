@@ -35,7 +35,7 @@ public class Elevator extends Subsystem {
     private final double ascendPower;
     private final double joltPower;
     private final double descendPower;
-    private final double taughtPower;
+    private final double tautPower;
 
     private boolean downReleased;
 
@@ -70,7 +70,7 @@ public class Elevator extends Subsystem {
         ascendPower = factory.getConstant(NAME, "ascendPower");
         joltPower = factory.getConstant(NAME, "joltPower");
         descendPower = factory.getConstant(NAME, "descendPower");
-        taughtPower = factory.getConstant(NAME, "taughtPower");
+        tautPower = factory.getConstant(NAME, "tautPower");
 
         if (Constants.kLoggingRobot) {
             spoolCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Elevator/currentDraw");
@@ -117,7 +117,7 @@ public class Elevator extends Subsystem {
                 case HUMAN_COLLECT, EMERGENCY_DOWN -> desiredPower = descendPower;
                 case JOLT -> desiredPower = joltPower;
                 case SILO_DROP -> desiredPower = ascendPower;
-                default -> desiredPower = taughtPower; //Stop
+                default -> desiredPower = tautPower; //Stop
             }
 
             spoolMotor.set(ControlMode.PercentOutput, desiredPower);
