@@ -332,7 +332,7 @@ public class Robot extends TimedRobot {
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
         robotState.actualCollectorState = Collector.COLLECTOR_STATE.STOP;
-        robotState.actualElevatorHeightState = Elevator.HEIGHT_STATE.STOP
+        robotState.actualElevatorHeightState = Elevator.HEIGHT_STATE.STOP;
         // TODO: Set up subsystem states
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
