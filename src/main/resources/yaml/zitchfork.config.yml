@@ -40,8 +40,8 @@ subsystems:
       slot0:
         kP: 0 # Will only need to tune kP for this
     constants:
-      intakePower: 0.5 #to change
-      outtakePower: -0.5 #to change
+      intakeSpeed: 0.5 #to change
+      outtakeSpeed: -0.5 #to change
   camera:
     implemented: false
     constants:

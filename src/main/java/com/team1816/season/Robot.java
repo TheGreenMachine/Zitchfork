@@ -17,6 +17,7 @@ import com.team1816.season.configuration.Constants;
 import com.team1816.season.configuration.DrivetrainTargets;
 import com.team1816.season.states.Orchestrator;
 import com.team1816.season.states.RobotState;
+import com.team1816.season.subsystems.Collector;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -63,6 +64,7 @@ public class Robot extends TimedRobot {
     private final Drive drive;
 
     private final Camera camera;
+    private final Collector collector;
 
 
     /**
@@ -109,6 +111,7 @@ public class Robot extends TimedRobot {
         // TODO: Set up any other subsystems here.
 
         camera = Injector.get(Camera.class);
+        collector = Injector.get(Collector.class);
         robotState = Injector.get(RobotState.class);
         orchestrator = Injector.get(Orchestrator.class);
         infrastructure = Injector.get(Infrastructure.class);
@@ -163,7 +166,7 @@ public class Robot extends TimedRobot {
             // readFromHardware and writeToHardware on a loop, but it can only call read/write it if it
             // can recognize the subsystem. To recognize your subsystem, just add it alongside the
             // drive, ledManager, and camera parameters.
-            subsystemManager.setSubsystems(drive, camera);
+            subsystemManager.setSubsystems(drive, camera, collector);
 
             /** Logging */
             if (Constants.kLoggingRobot) {
@@ -284,6 +287,7 @@ public class Robot extends TimedRobot {
         disabledLoop.stop();
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
+        collector.zeroSensors();
 
         // TODO: Set up subsystem states
 

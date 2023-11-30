@@ -1,6 +1,7 @@
 package com.team1816.season.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
@@ -26,8 +27,8 @@ public class Collector extends Subsystem {
     /**
      * Properties
      */
-    public final double intakePower;
-    public final double outtakePower;
+    public final double intakeSpeed;
+    public final double outtakeSpeed;
 
     /**
      * Logging
@@ -49,11 +50,12 @@ public class Collector extends Subsystem {
      * @param inf  Infrastructure
      * @param rs   RobotState
      */
+    @Inject
     public Collector(String name, Infrastructure inf, RobotState rs) {
         super(name, inf, rs);
         intakeMotor = factory.getMotor(NAME, "intakeMotor");
-        intakePower = factory.getConstant(NAME, "intakePower", -0.5);
-        outtakePower = factory.getConstant(NAME, "outtakePower", 0.5);
+        intakeSpeed = factory.getConstant(NAME, "intakeSpeed", -0.5);
+        outtakeSpeed = factory.getConstant(NAME, "outtakeSpeed", 0.5);
         if (Constants.kLoggingRobot) {
             intakeVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/intakeVelocity");
             intakeCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Collector/currentDraw");
@@ -100,13 +102,13 @@ public class Collector extends Subsystem {
             outputsChanged = false;
             switch (desiredState) {
                 case STOP -> {
-                    intakeMotor.set(ControlMode.PercentOutput, 0);
+                    intakeMotor.set(ControlMode.Velocity, 0);
                 }
                 case INTAKE -> {
-                    intakeMotor.set(ControlMode.PercentOutput, intakePower);
+                    intakeMotor.set(ControlMode.Velocity, intakeSpeed);
                 }
                 case OUTTAKE -> {
-                    intakeMotor.set(ControlMode.PercentOutput, outtakePower);
+                    intakeMotor.set(ControlMode.Velocity, outtakeSpeed);
                 }
             }
         }
