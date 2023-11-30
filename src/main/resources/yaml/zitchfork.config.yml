@@ -18,11 +18,12 @@ subsystems:
       ## Velocity Constraints ##
       maxVelTicks100ms: 40275.7 # From Zodiac Pro
       encPPR: 22220.8 # Would need encoders
+      openLoopRampRate: 0.8
       isSwerve: 0
-      maxRotVel: 18 # Would need encoders
-      trackWidth: 19.75 # TODO get
-      wheelbaseLength: 19.75 # TODO get
-      wheelDiameter: 4 #TODO get
+      maxRotVel: 7.2
+      trackWidth: 25 # inches (21.5)
+      wheelbaseLength: 25 # inches (18.5)
+      wheelDiameter: 6.32
       kTrackScrubFactor: 1.0
       maxVelOpenLoop: 3.2 # meters/s, Minnetrials speed limit
       maxVelPathFollowing: 3.1 # meters/s (3.6)
