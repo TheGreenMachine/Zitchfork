@@ -425,8 +425,6 @@ public class Robot extends TimedRobot {
             }
 
             if (RobotBase.isReal()) {
-                collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
-                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.STOP);
                 // TODO: Logic for if the robot is not a simulation
                 // TODO: Also don't forget to add logic to make faulted false.
             }
