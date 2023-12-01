@@ -37,6 +37,8 @@ subsystems:
     implemented: true
     sparkmaxes:
       intakeMotor: 14 #change once get robot
+    solenoids:
+      storagePiston: -1 #TODO id
     pidConfig:
       slot0:
         kP: 0 # Must tune if use velocity
@@ -66,7 +68,7 @@ infrastructure:
   pigeonId: 9
   isPigeon2: false
   ## Compressor ##
-  compressorEnabled: false
+  compressorEnabled: true
   pcmId: -1
 controlboard: competition
 constants:

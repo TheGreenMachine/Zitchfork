@@ -256,6 +256,7 @@ public class Robot extends TimedRobot {
                                 collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
                                 controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0);
                             }
+                            collector.pushStorage(pressed);
                         }
                      ),
                     createAction(
