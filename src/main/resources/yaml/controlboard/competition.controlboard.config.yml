@@ -15,7 +15,7 @@ driver:
   buttons:
     start: zeroPose
 operator:
-  rumble: true
+  rumble: false
   buttonpad:
     y: siloPos
     b: autoScore1

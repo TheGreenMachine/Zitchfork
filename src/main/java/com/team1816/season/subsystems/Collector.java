@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.team1816.lib.Infrastructure;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
-import com.team1816.lib.hardware.components.pcm.ISolenoid;
 import com.team1816.lib.subsystems.Subsystem;
 import com.team1816.season.configuration.Constants;
 import com.team1816.season.states.RobotState;
@@ -24,8 +23,6 @@ public class Collector extends Subsystem {
      * Components
      */
     private final IGreenMotor intakeMotor;
-
-    private final ISolenoid storagePiston;
 
     /**
      * Properties
@@ -49,20 +46,17 @@ public class Collector extends Subsystem {
     /**
      * Base parameters needed to instantiate a subsystem
      *
-     * @param name String
      * @param inf  Infrastructure
      * @param rs   RobotState
      */
     @Inject
-    public Collector(String name, Infrastructure inf, RobotState rs) {
-        super(name, inf, rs);
+    public Collector(Infrastructure inf, RobotState rs) {
+        super(NAME, inf, rs);
         intakeMotor = factory.getMotor(NAME, "intakeMotor");
-        storagePiston = factory.getSolenoid(NAME, "storagePiston");
 
         intakeSpeed = factory.getConstant(NAME, "intakeSpeed", -0.5);
         outtakeSpeed = factory.getConstant(NAME, "outtakeSpeed", 0.5);
 
-        pushStorage(false);
         if (Constants.kLoggingRobot) {
             intakeVelocityLogger = new DoubleLogEntry(DataLogManager.getLog(), "Collector/intakeVelocity");
             intakeCurrentDraw = new DoubleLogEntry(DataLogManager.getLog(), "Collector/currentDraw");
@@ -77,10 +71,6 @@ public class Collector extends Subsystem {
     public void setDesiredState(COLLECTOR_STATE desiredState) {
         this.desiredState = desiredState;
         outputsChanged = true;
-    }
-
-    public void pushStorage(boolean isOut) {
-        storagePiston.set(isOut);
     }
 
     /**
@@ -113,13 +103,13 @@ public class Collector extends Subsystem {
             outputsChanged = false;
             switch (desiredState) {
                 case STOP -> {
-                    intakeMotor.set(ControlMode.Velocity, 0);
+                    intakeMotor.set(ControlMode.PercentOutput, 0);
                 }
                 case INTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, intakeSpeed);
+                    intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
                 }
                 case OUTTAKE -> {
-                    intakeMotor.set(ControlMode.Velocity, outtakeSpeed);
+                    intakeMotor.set(ControlMode.PercentOutput, outtakeSpeed);
                 }
             }
         }

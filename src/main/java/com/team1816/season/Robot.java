@@ -231,6 +231,7 @@ public class Robot extends TimedRobot {
                         () -> controlBoard.getAsBool("intakeCob"),
                         (pressed) -> {
                             if (pressed) {
+
                                 collector.setDesiredState(Collector.COLLECTOR_STATE.INTAKE);
                                 controlBoard.setFullRumble(IControlBoard.CONTROLLER.DRIVER, 0.75);
                             } else {
@@ -256,7 +257,6 @@ public class Robot extends TimedRobot {
                                 collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
                                 controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0);
                             }
-                            collector.pushStorage(pressed);
                         }
                      ),
                     createAction(
@@ -276,18 +276,18 @@ public class Robot extends TimedRobot {
                         () -> {
                             orchestrator.autoScore(2);
                         }
-                    ),
-                    createHoldAction(
-                        () -> controlBoard.getAsBool("emergencyJolt"),
-                        (pressed) -> {
-                            if (pressed) {
-                                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.HUMAN_COLLECT);
-                            } else {
-                                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.JOLT);
-                            }
-                            elevator.setDownReleased(pressed);
-                        }
                     )
+//                    createHoldAction(
+//                        () -> controlBoard.getAsBool("emergencyJolt"),
+//                        (pressed) -> {
+//                            if (pressed) {
+//                                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.HUMAN_COLLECT);
+//                            } else {
+//                                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.JOLT);
+//                            }
+//                            elevator.setDownReleased(pressed);
+//                        }
+                    //)
                     // Button Board Gamepad
                 );
         } catch (Throwable t) {

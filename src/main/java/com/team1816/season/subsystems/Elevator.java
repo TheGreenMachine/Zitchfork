@@ -7,6 +7,7 @@ import com.team1816.lib.controlboard.IControlBoard;
 import com.team1816.lib.hardware.components.motor.IGreenMotor;
 import com.team1816.lib.hardware.components.motor.LazyTalonSRX;
 import com.team1816.lib.subsystems.Subsystem;
+import com.team1816.lib.util.logUtil.GreenLogger;
 import com.team1816.season.configuration.Constants;
 import com.team1816.season.states.RobotState;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
@@ -133,12 +134,12 @@ public class Elevator extends Subsystem {
     private boolean isHeightAtTarget(){
         switch (desiredElevatorHeightState) {
             case SILO_DROP, JOLT -> {
-                if (((LazyTalonSRX) spoolMotor).isRevLimitSwitchClosed() == 1 && !outputsChanged) {
+                if (((LazyTalonSRX) spoolMotor).isFwdLimitSwitchClosed() == 1 && !outputsChanged) {
                     return true;
                 }
             }
             case HUMAN_COLLECT -> {
-                if (((LazyTalonSRX) spoolMotor).isFwdLimitSwitchClosed() == 1 && !outputsChanged) {
+                if (((LazyTalonSRX) spoolMotor).isRevLimitSwitchClosed() == 1 && !outputsChanged) {
                     return true;
                 }
             }

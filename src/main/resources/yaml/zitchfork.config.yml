@@ -37,14 +37,12 @@ subsystems:
     implemented: true
     sparkmaxes:
       intakeMotor: 14 #change once get robot
-    solenoids:
-      storagePiston: -1 #TODO id
     pidConfig:
       slot0:
         kP: 0 # Must tune if use velocity
     constants:
-      intakeSpeed: -0.4
-      outtakeSpeed: 0.4
+      intakeSpeed: -0.5
+      outtakeSpeed: 0.65
   camera:
     implemented: false
     constants:
