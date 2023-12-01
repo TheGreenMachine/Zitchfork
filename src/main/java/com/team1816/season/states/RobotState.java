@@ -118,7 +118,7 @@ public class RobotState {
         calculatedVehicleAccel = new ChassisSpeeds();
         triAxialAcceleration = new Double[]{0d, 0d, 0d};
         actualCollectorState = Collector.COLLECTOR_STATE.STOP;
-        actualElevatorHeightState = Elevator.HEIGHT_STATE.HUMAN_COLLECT;
+        actualElevatorHeightState = Elevator.HEIGHT_STATE.STOP;
         isPoseUpdated = true;
         superlativeTarget = new VisionPoint();
         visibleTargets = new ArrayList<>();

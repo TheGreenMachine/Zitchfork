@@ -22,7 +22,7 @@ public class ScoreAction extends SeriesAction {
                 //May need 2 collect-wait blocks
                 // resetting elevator / collector to starting states
                 new CollectAction(Collector.COLLECTOR_STATE.STOP),
-                new ElevatorAction(Elevator.HEIGHT_STATE.STOW)
+                new ElevatorAction(Elevator.HEIGHT_STATE.STOP)
             )
         );
     }

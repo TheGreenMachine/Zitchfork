@@ -21,13 +21,13 @@ subsystems:
       openLoopRampRate: 0.8
       isSwerve: 0
       maxRotVel: 7.2
-      trackWidth: 25 # inches (21.5)
-      wheelbaseLength: 25 # inches (18.5)
+      trackWidth: 21.5 # inches (25)
+      wheelbaseLength: 18.5 # inches (25)
       wheelDiameter: 6.32
       kTrackScrubFactor: 1.0
-      maxVelOpenLoop: 3.2 # meters/s, Minnetrials speed limit
-      maxVelPathFollowing: 3.1 # meters/s (3.6)
-      maxAccel: 1.5 # meters/s^2 (2.54)
+      maxVelOpenLoop: 2.5 # meters/s, Minnetrials speed limit
+      maxVelPathFollowing: 2 # meters/s (3.6)
+      maxAccel: 1 # meters/s^2 (2.54)
       currentLimit: 40
       isDemoMode: 0
       ## Auto Balance ##
@@ -50,8 +50,7 @@ subsystems:
   elevator:
     implemented: true
     talons:
-      #TODO id the motor
-      heightMotor: -1 # Use -1 as the placeholder value because 0 is a valid id
+      spoolMotor: 6 # Use -1 as the placeholder value because 0 is a valid id
     constants:
       #TODO find these values
       ascendPower: 0
