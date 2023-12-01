@@ -332,8 +332,8 @@ public class Robot extends TimedRobot {
 
         drive.zeroSensors(autoModeManager.getSelectedAuto().getInitialPose());
 
-        robotState.actualCollectorState = Collector.COLLECTOR_STATE.STOP;
-        robotState.actualElevatorHeightState = Elevator.HEIGHT_STATE.STOP;
+        collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
+        elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.STOP);
         // TODO: Set up subsystem states
 
         drive.setControlState(Drive.ControlState.TRAJECTORY_FOLLOWING);
@@ -352,6 +352,7 @@ public class Robot extends TimedRobot {
             disabledLoop.stop();
 
             infrastructure.startCompressor();
+            //elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.HUMAN_COLLECT); TODO Uncomment once elevator working!
 
             teleopStart = Timer.getFPGATimestamp();
             enabledLoop.start();
@@ -424,6 +425,8 @@ public class Robot extends TimedRobot {
             }
 
             if (RobotBase.isReal()) {
+                collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
+                elevator.setDesiredElevatorHeightState(Elevator.HEIGHT_STATE.STOP);
                 // TODO: Logic for if the robot is not a simulation
                 // TODO: Also don't forget to add logic to make faulted false.
             }
