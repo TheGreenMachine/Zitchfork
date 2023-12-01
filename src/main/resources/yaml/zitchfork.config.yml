@@ -54,10 +54,9 @@ subsystems:
     talons:
       spoolMotor: 6 # Use -1 as the placeholder value because 0 is a valid id
     constants:
-      #TODO find these values
-      ascendPower: 0
-      joltPower: 0
-      descendPower: 0
+      ascendPower: 0.75
+      joltPower: 0.85
+      descendPower: -0.45
       tautPower: 0
 infrastructure:
   canivoreBusName: rio
