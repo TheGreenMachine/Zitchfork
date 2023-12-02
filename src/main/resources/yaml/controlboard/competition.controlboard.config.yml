@@ -18,8 +18,8 @@ operator:
   rumble: false
   buttonpad:
     y: siloPos
-    b: autoScore1
-    a: autoScore2
+#    b: autoScore1
+#    a: autoScore2
   axes:
     rightTrigger: outtake
 demoMode: false
