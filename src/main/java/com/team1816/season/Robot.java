@@ -479,9 +479,9 @@ public class Robot extends TimedRobot {
 
         double rotation = controlBoard.getAsDouble("rotation");
         double rotateFix = controlBoard.getAsDouble("rotateFix") * 0.5;
-        if (rotation > 0) {
+        if (rotation > 0.1) {
             rotation += rotateFix;
-        } else if (rotation < 0) {
+        } else if (rotation < -0.1) {
             rotation -= rotateFix;
         }
 

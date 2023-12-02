@@ -30,7 +30,7 @@ public class CheesyDriveHelper implements DriveHelper {
 
     private static final double kWheelQuckTurnScalar = 0.4; // 0.48 .65
 
-    private static final double kQuickStopDeadband = 0.5;
+    private static final double kQuickStopDeadband = 0.3;
     private static final double kQuickStopWeight = 0.125;
     private static final double kQuickStopScalar = 2.8;
     private static final double SET_SPEED_DIFF_MAX = 0.056;
