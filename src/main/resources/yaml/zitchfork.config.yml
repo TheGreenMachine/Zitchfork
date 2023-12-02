@@ -28,7 +28,7 @@ subsystems:
       maxVelOpenLoop: 2.5 # meters/s, Minnetrials speed limit
       maxVelPathFollowing: 2 # meters/s (3.6)
       maxAccel: 1 # meters/s^2 (2.54)
-      currentLimit: 40
+      currentLimit: 30
       isDemoMode: 0
       ## Auto Balance ##
       autoBalanceDivider: 50

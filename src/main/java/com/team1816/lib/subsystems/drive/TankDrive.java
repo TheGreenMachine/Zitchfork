@@ -328,7 +328,7 @@ public class TankDrive extends Drive implements DifferentialDrivetrain {
         DriveSignal driveSignal = driveHelper.cheesyDrive(
             (isDemoMode ? forward * demoModeMultiplier : forward),
             (isDemoMode ? rotation * demoModeMultiplier : rotation),
-            false,
+            true,
             false
         );
 
