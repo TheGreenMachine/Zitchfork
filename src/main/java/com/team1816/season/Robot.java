@@ -477,13 +477,20 @@ public class Robot extends TimedRobot {
     public void manualControl() {
         actionManager.update();
 
+        double rotation = controlBoard.getAsDouble("rotation");
+        double rotateFix = controlBoard.getAsDouble("rotateFix") * 0.5;
+        if (rotation > 0) {
+            rotation += rotateFix;
+        } else if (rotation < 0) {
+            rotation -= rotateFix;
+        }
+
         drive.setTeleopInputs(
             -controlBoard.getAsDouble("throttle"),
             -controlBoard.getAsDouble("strafe"),
-            controlBoard.getAsDouble("rotation")
+            rotation
         );
-
-        }
+    }
 
     /**
      * Actions to perform periodically when the robot is in the test period

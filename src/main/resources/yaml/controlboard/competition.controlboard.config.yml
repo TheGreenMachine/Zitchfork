@@ -6,6 +6,7 @@ driver:
       vertical: throttle
     right:
       horizontal: rotation
+      vertical: rotateFix
   buttonpad:
     b: brakeMode
   axes:
