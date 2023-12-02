@@ -231,12 +231,11 @@ public class Robot extends TimedRobot {
                         () -> controlBoard.getAsBool("intakeCob"),
                         (pressed) -> {
                             if (pressed) {
-
                                 collector.setDesiredState(Collector.COLLECTOR_STATE.INTAKE);
-                                controlBoard.setFullRumble(IControlBoard.CONTROLLER.DRIVER, 0.75);
+                                controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0.75);
                             } else {
                                 collector.setDesiredState(Collector.COLLECTOR_STATE.STOP);
-                                controlBoard.setFullRumble(IControlBoard.CONTROLLER.DRIVER, 0);
+                                controlBoard.setFullRumble(IControlBoard.CONTROLLER.OPERATOR, 0);
                             }
                         }
                     ),
